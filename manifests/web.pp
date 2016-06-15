@@ -67,6 +67,12 @@ define rgbank::web (
     docroot => $install_dir_real,
     port    => $listen_port,
   }
+
+  selinux::port { 'allow-httpd-port':
+    context  => 'http_port_t',
+    port     => $listen_port,
+    protocol => 'tcp',
+  }
 }
 
 Rgbank::Web produces Http {
