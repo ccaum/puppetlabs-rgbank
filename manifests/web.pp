@@ -74,6 +74,12 @@ define rgbank::web (
     protocol => 'tcp',
     before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
   }
+
+  selinux::boolean { 'httpd_can_network_connect':
+    ensure     => true,
+    persistent => true,
+    before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
+  }
 }
 
 Rgbank::Web produces Http {
