@@ -6,6 +6,7 @@ define rgbank::web (
   $listen_port = '8060',
   $install_dir = undef,
 ) {
+  include apache
 
   if $install_dir {
     $install_dir_real = $install_dir
