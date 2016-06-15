@@ -25,7 +25,7 @@ define rgbank::web (
   wordpress::instance::app { "rgbank_${name}":
     install_dir          => $install_dir_real,
     install_url          => 'http://wordpress.org',
-    version              => '4.3.1',
+    version              => '4.5.2',
     db_host              => $db_host,
     db_name              => $db_name,
     db_user              => $db_user,
