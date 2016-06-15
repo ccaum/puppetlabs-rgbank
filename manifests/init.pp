@@ -1,10 +1,10 @@
 application rgbank (
-  $web_count = 1,
   $db_username = 'test',
   $db_password = 'test'
 ) {
 
-  $webs = $web_count.map |$i| { Http["rgbank-web-${name}-${i}"] }
+  $web_components = collect_component_titles($nodes, Rgbank::Web)
+  $webs = $web_components.map |$i| { Http["rgbank-web-${name}-${i}"] }
 
   rgbank::db { $name:
     user     => $db_username,
