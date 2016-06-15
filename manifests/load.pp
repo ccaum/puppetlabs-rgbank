@@ -23,13 +23,13 @@ define rgbank::load (
       options           => 'check verify none',
     }
   }
-}
 
   firewall { '000 accept rgbank web connections':
     dport  => $port,
     proto  => tcp,
     action => accept,
   }
+}
 
 Rgbank::Load produces Http {
   name => $name,
@@ -37,4 +37,5 @@ Rgbank::Load produces Http {
   host => $::fqdn,
   port => $port,
 }
-#Rgbank::Load consumes Http { }
+
+Rgbank::Load consumes Http { }
