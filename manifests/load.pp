@@ -24,7 +24,7 @@ define rgbank::load (
     }
   }
 
-  firewall { '000 accept rgbank web connections':
+  firewall { '000 accept rgbank load balanced connections':
     dport  => $port,
     proto  => tcp,
     action => accept,
