@@ -16,12 +16,24 @@ define rgbank::load (
   }
 
   $balancermembers.each |$member| {
+
     haproxy::balancermember { $member['host']:
       listening_service => "rgbank-${name}",
       server_names      => $member['host'],
       ipaddresses       => $member['ip'],
       ports             => $member['port'],
       options           => 'check verify none',
+    }
+
+    $member_port = $member['port']
+    $port_name = "allow-haproxy-balance-member-${member_port}"
+    if !defined(Selinux::Port[$port_name]) {
+      selinux::port { $port_name:
+        context  => 'http_port_t',
+        port     => $member['port'],
+        protocol => 'tcp',
+        before   => Haproxy::Linux["rgbank-${name}"],
+      }
     }
   }
 
