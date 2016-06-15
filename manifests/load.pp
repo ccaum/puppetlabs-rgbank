@@ -2,6 +2,7 @@ define rgbank::load (
   $balancermembers,
   $port = 80,
 ) {
+  include haproxy
 
   haproxy::listen {"rgank-${name}":
     collect_exported => false,
