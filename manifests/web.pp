@@ -72,6 +72,7 @@ define rgbank::web (
     context  => 'http_port_t',
     port     => $listen_port,
     protocol => 'tcp',
+    before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
   }
 }
 
