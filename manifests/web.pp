@@ -70,7 +70,7 @@ define rgbank::web (
 
 Rgbank::Web produces Http {
   name => $name,
-  ip   => $::networking['interfaces']['enp0s8']['ip'],
+  ip   => $::networking['interfaces'][$::networking['interfaces'].keys[0]]['ip'],
   port => $listen_port,
   host => $::hostname,
 }
