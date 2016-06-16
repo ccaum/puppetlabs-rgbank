@@ -3,7 +3,7 @@ application rgbank (
   $db_password = 'test'
 ) {
 
-  $web_components = collect_component_titles($nodes, Rgbank::Web).count()
+  $web_components = collect_component_titles($nodes, Rgbank::Web)
 
   rgbank::db { $name:
     user     => $db_username,
@@ -14,7 +14,7 @@ application rgbank (
   $web_https = $web_components.map |$comp_name| {
     $http = Http["rgbank-${comp_name}"]
 
-    rgbank::web { $comp_name:
+    rgbank::web { "${comp_name}":
       consume => Mysqldb["rgbank-${name}"],
       export  => $http,
     }
