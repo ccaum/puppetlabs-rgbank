@@ -4,7 +4,7 @@ define rgbank::load (
 ) {
   include haproxy
 
-  haproxy::listen {"rgank-${name}":
+  haproxy::listen {"rgbank-${name}":
     collect_exported => false,
     ipaddress        => '0.0.0.0',
     mode             => 'http',
