@@ -68,7 +68,7 @@ define rgbank::web (
     port    => $listen_port,
   }
 
-  selinux::port { 'allow-httpd-port':
+  selinux::port { "allow-httpd-${listen_port}":
     context  => 'http_port_t',
     port     => $listen_port,
     protocol => 'tcp',
