@@ -6,7 +6,7 @@ define rgbank::db (
   $db_name = "rgbank-${name}"
 
   if $environment != 'production' {
-    staging::deploy { "rgbank-${db_name}.sql":
+    staging::file { "rgbank-${db_name}.sql":
       source => $mock_sql_source,
       target => "/var/lib/${db_name}/rgbank.sql",
     }
