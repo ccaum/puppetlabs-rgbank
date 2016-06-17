@@ -1,15 +1,15 @@
 define rgbank::db (
   $user,
   $password,
+  $mock_sql_source = hiera('rgbank-mock-sql-path'),
 ) {
   $db_name = "rgbank-${name}"
 
-  #Needed for the latest SQL file
-  vcsrepo { "/var/lib/${db_name}":
-    ensure   => latest,
-    source   => 'https://github.com/puppetlabs-pmmteam/rgbank.git',
-    provider => git,
-    before   => Mysql::Db[$db_name],
+  if $environment != 'production' {
+    staging::deploy { "rgbank-${db_name}.sql":
+      source => $mock_sql_source,
+      target => "/var/lib/${db_name}/rgbank.sql",
+    }
   }
 
   mysql::db { $db_name:
