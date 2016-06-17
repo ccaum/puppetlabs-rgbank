@@ -3,6 +3,7 @@ define rgbank::web (
   $db_host,
   $db_user,
   $db_password,
+  $version = hiera('rgbank-build-version'),
   $listen_port = '8060',
   $install_dir = undef,
 ) {
@@ -14,13 +15,19 @@ define rgbank::web (
     $install_dir_real = "/opt/rgbank-${name}"
   }
 
-  vcsrepo { "${install_dir_real}/wp-content/themes/rgbank":
-    ensure   => latest,
-    source   => 'https://github.com/puppetlabs-pmmteam/rgbank.git',
-    provider => git,
-    require  => Wordpress::Instance::App["rgbank_${name}"],
-    notify   => Service['httpd'],
+  archive { "rgbank-build-${version}":
+    ensure => present,
+    url    => "http://10-32-173-237.rfc1918.puppetlabs.net/builds/rgbank/rgbank-build-${version}",
+    target => "${install_dir_real}/wp-content/themes/rgbank",
   }
+
+  #vcsrepo { "${install_dir_real}/wp-content/themes/rgbank":
+  #  ensure   => latest,
+  #  source   => 'https://github.com/puppetlabs-pmmteam/rgbank.git',
+  #  provider => git,
+  #  require  => Wordpress::Instance::App["rgbank_${name}"],
+  #  notify   => Service['httpd'],
+  #}
 
   wordpress::instance::app { "rgbank_${name}":
     install_dir          => $install_dir_real,
