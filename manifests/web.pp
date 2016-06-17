@@ -17,7 +17,7 @@ define rgbank::web (
 
   archive { "rgbank-build-${version}":
     ensure => present,
-    url    => "http://10-32-173-237.rfc1918.puppetlabs.net/builds/rgbank/rgbank-build-${version}",
+    url    => "http://10-32-173-237.rfc1918.puppetlabs.net/builds/rgbank/rgbank-build-${version}.tar.gz",
     target => "${install_dir_real}/wp-content/themes/rgbank",
   }
 
