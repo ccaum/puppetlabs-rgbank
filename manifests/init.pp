@@ -4,11 +4,15 @@ application rgbank (
 ) {
 
   $web_components = collect_component_titles($nodes, Rgbank::Web)
+  $db_components = collect_component_titles($nodes, Rgbank::Db)
+  $load_components = collect_component_titles($nodes, Rgbank::Load)
 
-  rgbank::db { $name:
-    user     => $db_username,
-    password => $db_password,
-    export   => Mysqldb["rgbank-${name}"],
+  $db_components.each |$comp_name| {
+    rgbank::db { $name:
+      user     => $db_username,
+      password => $db_password,
+      export   => Mysqldb["rgbank-${name}"],
+    }
   }
 
   $web_https = $web_components.map |$comp_name| {
@@ -23,9 +27,11 @@ application rgbank (
     $http
   }
 
-  rgbank::load { $name:
-    balancermembers => $web_https,
-    require         => $web_https,
-    export          => Http["rgbank-web-lb-${name}"],
+  $load_components.each |$comp_name| {
+    rgbank::load { $comp_name:
+      balancermembers => $web_https,
+      require         => $web_https,
+      export          => Http["rgbank-web-lb-${name}"],
+    }
   }
 }
