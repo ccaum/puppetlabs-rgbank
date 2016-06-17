@@ -8,7 +8,7 @@ application rgbank (
   $load_components = collect_component_titles($nodes, Rgbank::Load)
 
   $db_components.each |$comp_name| {
-    rgbank::db { $name:
+    rgbank::db { $comp_name:
       user     => $db_username,
       password => $db_password,
       export   => Mysqldb["rgbank-${name}"],
