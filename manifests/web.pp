@@ -3,7 +3,7 @@ define rgbank::web (
   $db_host,
   $db_user,
   $db_password,
-  $version = hiera('rgbank-build-version'),
+  $version = hiera('rgbank-build-version', ''),
   $source = hiera('rgbank-build-path'),
   $listen_port = '8060',
   $install_dir = undef,
