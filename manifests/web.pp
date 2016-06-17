@@ -4,6 +4,7 @@ define rgbank::web (
   $db_user,
   $db_password,
   $version = hiera('rgbank-build-version'),
+  $source = hiera('rgbank-build-path'),
   $listen_port = '8060',
   $install_dir = undef,
 ) {
@@ -17,7 +18,7 @@ define rgbank::web (
 
   archive { "rgbank-build-${version}":
     ensure     => present,
-    url        => "http://10-32-173-237.rfc1918.puppetlabs.net/builds/rgbank/rgbank-build-${version}.tar.gz",
+    url        => $source,
     target     => "${install_dir_real}/wp-content/themes/rgbank",
     checksum   => false,
     src_target => '/tmp'
