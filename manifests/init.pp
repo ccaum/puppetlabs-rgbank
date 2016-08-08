@@ -11,7 +11,7 @@ application rgbank (
     rgbank::db { $comp_name:
       user     => $db_username,
       password => $db_password,
-      export   => Mysqldb["rgbank-${name}"],
+      export   => Mysqldb["rgbank-db"],
     }
   }
 
@@ -19,7 +19,7 @@ application rgbank (
     $http = Http["rgbank-${comp_name}"]
 
     rgbank::web { "${comp_name}":
-      consume => Mysqldb["rgbank-${name}"],
+      consume => Mysqldb["rgbank-db"],
       export  => $http,
     }
 
@@ -28,9 +28,11 @@ application rgbank (
   }
 
   $load_components.each |$comp_name| {
+    $http_query = 'resources { type = "Http" and title ~ \'rgbank-.*\'}'
+    $http_resources = puppetdb_query($http_query)
     rgbank::load { $comp_name:
-      balancermembers => $web_https,
-      require         => $web_https,
+      balancermembers => $http_resources,
+      require         => $http_resources,
       export          => Http["rgbank-web-lb-${name}"],
     }
   }
