@@ -16,7 +16,7 @@ application rgbank (
   }
 
   $web_https = $web_components.map |$comp_name| {
-    $http = Http["rgbank-${comp_name}"]
+    $http = Http["rgbank-web-${comp_name}"]
 
     rgbank::web { "${comp_name}":
       consume => Mysqldb["rgbank-db"],
@@ -28,7 +28,7 @@ application rgbank (
   }
 
   $load_components.each |$comp_name| {
-    $http_query = "resources { type = 'Http' and title ~ 'rgbank-.*', and environment = ${::environment}"
+    $http_query = "resources { type = 'Http' and title ~ '^rgbank-web-.*' and environment = ${::environment}"
     $http_resources = puppetdb_query($http_query)
     rgbank::load { $comp_name:
       balancermembers => $http_resources,
