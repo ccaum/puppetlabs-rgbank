@@ -37,8 +37,8 @@ application rgbank (
     $all_http_resources = unique(concat($http_resources, $web_https))
 
     rgbank::load { $comp_name:
-      balancermembers => $web_https,
-      require         => $web_https,
+      balancermembers => $all_http_resources,
+      require         => $all_http_resources,
       export          => Http["rgbank-lb-${name}"],
     }
   }
