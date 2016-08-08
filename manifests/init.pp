@@ -34,7 +34,7 @@ application rgbank (
       Http[$resource['title']]
     }
 
-    $all_http_resources = unique(join($http_resources, $web_https))
+    $all_http_resources = unique(concat($http_resources, $web_https))
 
     rgbank::load { $comp_name:
       balancermembers => $all_http_resources,
