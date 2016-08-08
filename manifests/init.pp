@@ -28,7 +28,7 @@ application rgbank (
   }
 
   $load_components.each |$comp_name| {
-    $http_query = 'resources { type = "Http" and title ~ \'rgbank-.*\'}'
+    $http_query = "resources { type = 'Http' and title ~ 'rgbank-.*', and environment = ${::environment}"
     $http_resources = puppetdb_query($http_query)
     rgbank::load { $comp_name:
       balancermembers => $http_resources,
