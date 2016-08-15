@@ -22,7 +22,7 @@ application rgbank (
     }
 
     rgbank::web { "${comp_name}":
-      consume => ? $dynamic_infrastructure {
+      consume => $dynamic_infrastructure ? {
         true  => [Mysqldb["rgbank-db"], Vinfrastructure["rgbank-web-${comp_name}"]],
         false => Mysqldb["rgbank-db"]
       },
