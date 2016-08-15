@@ -4,9 +4,12 @@ application rgbank (
   $dynamic_infrastructure = false
 ) {
 
+  $db_components = collect_component_titles($nodes, Rgbank::Db)
   $web_components = collect_component_titles($nodes, Rgbank::Web)
+  $load_components = collect_component_titles($nodes, Rgbank::Load)
 
-  rgbank::db { "rgbank-db-${name}":
+  #Assume we only have one DB component
+  rgbank::db { $db_components[0]:
     user     => $db_username,
     password => $db_password,
     export   => Mysqldb["rgbank-${name}"],
@@ -33,7 +36,8 @@ application rgbank (
     $http
   }
 
-  rgbank::load { "rgbank-lb-${name}":
+  #Assume we only have one load balancer component
+  rgbank::load { $load_components[0]:
     balancermembers => $web_https,
     require         => $web_https,
     export          => Http["rgbank-lb-${name}"],
