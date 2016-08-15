@@ -4,7 +4,7 @@ application rgbank (
   $dynamic_infrastructure = false
 ) {
 
-  $db_components = collect_component_titles($nodes, Rgbank::Db)
+  $web_components = collect_component_titles($nodes, Rgbank::Web)
 
   rgbank::db { "rgbank-db-${name}":
     user     => $db_username,
