@@ -9,7 +9,7 @@ application rgbank (
   rgbank::db { "rgbank-db-${name}":
     user     => $db_username,
     password => $db_password,
-    export   => Mysqldb["rgbank-db-${name}"],
+    export   => Mysqldb["rgbank-${name}"],
   }
 
   $web_https = $web_components.map |$comp_name| {
@@ -23,8 +23,8 @@ application rgbank (
 
     rgbank::web { "${comp_name}":
       consume => $dynamic_infrastructure ? {
-        true  => [Mysqldb["rgbank-db-${name}"], Vinfrastructure["rgbank-web-${comp_name}"]],
-        false => Mysqldb["rgbank-db-${name}"]
+        true  => [Mysqldb["rgbank-${name}"], Vinfrastructure["rgbank-web-${comp_name}"]],
+        false => Mysqldb["rgbank-${name}"]
       },
       export  => $http,
     }
