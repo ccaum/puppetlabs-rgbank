@@ -38,7 +38,7 @@ application rgbank (
 
   if $load_components.size() > 0 {
     #Assume we only have one load balancer component
-    rgbank::load { "${load_components[0]}-${name}:
+    rgbank::load { "${load_components[0]}-${name}":
       balancermembers => $web_https,
       require         => $web_https,
       export          => Http["rgbank-lb-${name}"],
