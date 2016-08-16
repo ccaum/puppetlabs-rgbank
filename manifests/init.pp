@@ -9,10 +9,12 @@ application rgbank (
   $load_components = collect_component_titles($nodes, Rgbank::Load)
 
   #Assume we only have one DB component
-  rgbank::db { "${db_components[0]}-${name}":
-    user     => $db_username,
-    password => $db_password,
-    export   => Mysqldb["rgbank-${name}"],
+  if $db_components.size() > 0 {
+    rgbank::db { $db_components[0]:
+      user     => $db_username,
+      password => $db_password,
+      export   => Mysqldb["rgbank-${name}"],
+    }
   }
 
   $web_https = $web_components.map |$comp_name| {
@@ -38,7 +40,7 @@ application rgbank (
 
   if $load_components.size() > 0 {
     #Assume we only have one load balancer component
-    rgbank::load { "${load_components[0]}-${name}":
+    rgbank::load { $load_components[0]:
       balancermembers => $web_https,
       require         => $web_https,
       export          => Http["rgbank-lb-${name}"],
