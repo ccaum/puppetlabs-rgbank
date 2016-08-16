@@ -7,6 +7,7 @@ application rgbank (
   $db_components = collect_component_titles($nodes, Rgbank::Db)
   $web_components = collect_component_titles($nodes, Rgbank::Web)
   $load_components = collect_component_titles($nodes, Rgbank::Load)
+  $vinfrastructure_components = collect_component_titles($nodes, Rgbank::Infrastructure::Web)
 
   #Assume we only have one DB component
   if $db_components.size() > 0 {
@@ -19,16 +20,20 @@ application rgbank (
 
   $web_https = $web_components.map |$comp_name| {
     $http = Http["rgbank-web-${comp_name}"]
+    $vm = $comp_name.split('/')[0]
 
     if $dynamic_infrastructure {
-      rgbank::infrastructure::web { $comp_name:
-        export => Vinfrastructure["rgbank-web-${comp_name}"],
+
+      #Assume we have a single vinfrastructure service
+      rgbank::infrastructure::web { $vm:
+        name   => $vm,
+        export => Vinfrastructure[$vm],
       }
     }
 
     rgbank::web { "${comp_name}":
       consume => $dynamic_infrastructure ? {
-        true  => [Mysqldb[$db_components[0]], Vinfrastructure["rgbank-web-${comp_name}"]],
+        true  => [Mysqldb[$db_components[0]], Vinfrastructure[$vm]],
         false => Mysqldb[$db_components[0]]
       },
       export  => $http,

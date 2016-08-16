@@ -1,9 +1,13 @@
-define rgbank::infrastructure::web() {
-  vsphere_vm { "/opdx1/vm/carl/${name}":
+define rgbank::infrastructure::web(
+  $memory = 1024,
+  $cpus   = 1,
+  $template = '/opdx1/vm/carl/test',
+) {
+  vsphere_vm { "/opdx1/vm/carl/${title}":
     ensure         => present,
-    memory         => 1024,
-    cpus           => 1,
-    source         => '/opdx1/vm/carl/centos-7-x86_64',
+    memory         => $memory,
+    cpus           => $cpus,
+    source         => $template,
     source_type    => 'template',
     create_command => {
       command   => '/bin/curl',
@@ -14,4 +18,8 @@ define rgbank::infrastructure::web() {
   }
 }
 
-Rgbank::Infratructure produces Vinfrastructure { }
+Rgbank::Infrastructure::Web produces Vinfrastructure {
+  memory   => $memory,
+  cpus     => $cpus,
+  template => $template,
+}
