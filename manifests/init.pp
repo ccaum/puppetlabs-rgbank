@@ -22,9 +22,7 @@ application rgbank (
     $http = Http["rgbank-web-${comp_name}"]
     $vm = $comp_name.split('/')[0]
 
-    if $dynamic_infrastructure {
-
-      #Assume we have a single vinfrastructure service
+    if $infrastructure_components.size() > 0 {
       rgbank::infrastructure::web { $vm:
         name   => $vm,
         export => Vinfrastructure[$vm],
