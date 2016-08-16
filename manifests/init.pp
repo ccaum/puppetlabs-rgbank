@@ -20,20 +20,20 @@ application rgbank (
 
   $web_https = $web_components.map |$comp_name| {
     $http = Http["rgbank-web-${comp_name}"]
-    $vm = $comp_name.split('/')[0]
 
     if $vinfrastructure_components.size() > 0 {
+      $vm = $comp_name.split('/')[0]
+      $rgbank_web_consume = [Mysqldb[$db_components[0]], Vinfrastructure[$vm]]
+
       rgbank::infrastructure::web { $vm:
-        name   => $vm,
         export => Vinfrastructure[$vm],
       }
+    } else {
+     $rgbank_web_consume = Mysqldb[$db_components[0]]
     }
 
     rgbank::web { "${comp_name}":
-      consume => $dynamic_infrastructure ? {
-        true  => [Mysqldb[$db_components[0]], Vinfrastructure[$vm]],
-        false => Mysqldb[$db_components[0]]
-      },
+      consume => $rgbank_web_consume,
       export  => $http,
     }
 
