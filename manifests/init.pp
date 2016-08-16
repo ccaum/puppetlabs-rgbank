@@ -13,7 +13,7 @@ application rgbank (
     rgbank::db { $db_components[0]:
       user     => $db_username,
       password => $db_password,
-      export   => Mysqldb["rgbank-${name}"],
+      export   => Mysqldb[$db_components[0]],
     }
   }
 
@@ -28,8 +28,8 @@ application rgbank (
 
     rgbank::web { "${comp_name}":
       consume => $dynamic_infrastructure ? {
-        true  => [Mysqldb["rgbank-${name}"], Vinfrastructure["rgbank-web-${comp_name}"]],
-        false => Mysqldb["rgbank-${name}"]
+        true  => [Mysqldb[$db_components[0]], Vinfrastructure["rgbank-web-${comp_name}"]],
+        false => Mysqldb[$db_components[0]]
       },
       export  => $http,
     }
@@ -43,7 +43,7 @@ application rgbank (
     rgbank::load { $load_components[0]:
       balancermembers => $web_https,
       require         => $web_https,
-      export          => Http["rgbank-lb-${name}"],
+      export          => Http[$load_components[0]],
     }
   }
 }
