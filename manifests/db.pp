@@ -22,9 +22,11 @@ define rgbank::db (
     sql      => "/var/lib/${db_name}/rgbank.sql",
   }
 
-  mysql_user { "${user}@localhost":
-    ensure        => 'present',
-    password_hash => mysql_password($password),
+  if ! defined(Mysql_user["${user}@localhost"]) {
+    mysql_user { "${user}@localhost":
+      ensure        => 'present',
+      password_hash => mysql_password($password),
+    }
   }
 }
 
