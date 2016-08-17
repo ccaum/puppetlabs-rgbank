@@ -97,3 +97,5 @@ Rgbank::Web consumes Mysqldb {
   db_user     => $user,
   db_password => $password,
 }
+
+Rgbank::Web consume Vinfrastructure { }
