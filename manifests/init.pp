@@ -1,12 +1,11 @@
 application rgbank (
   $db_username = 'test',
   $db_password = 'test',
-  $dynamic_infrastructure = false,
-  $use_docker = false,
 ) {
 
   $db_components = collect_component_titles($nodes, Rgbank::Db)
   $web_components = collect_component_titles($nodes, Rgbank::Web)
+  $web_docker_components = collect_component_titles($nodes, Rgbank::Web::Docker)
   $load_components = collect_component_titles($nodes, Rgbank::Load)
   $vinfrastructure_components = collect_component_titles($nodes, Rgbank::Infrastructure::Web)
 
@@ -33,7 +32,7 @@ application rgbank (
      $rgbank_web_consume = Mysqldb[$db_components[0]]
     }
 
-    if $use_docker {
+    if $web_docker_components > 0 {
       rgbank::web::docker { $comp_name:
         consume => $rgbank_web_consume,
         export  => $http,
