@@ -27,3 +27,19 @@ class rgbank::web::docker(
     action => accept,
   }
 }
+
+Rgbank::Web produces Http {
+  name => $name,
+  ip   => $::networking['interfaces'][$::networking['interfaces'].keys[0]]['ip'],
+  port => $listen_port,
+  host => $::hostname,
+}
+
+Rgbank::Web consumes Mysqldb {
+  db_name     => $database,
+  db_host     => $host,
+  db_user     => $user,
+  db_password => $password,
+}
+
+Rgbank::Web consumes Vinfrastructure { }
