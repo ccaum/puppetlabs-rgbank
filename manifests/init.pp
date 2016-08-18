@@ -1,7 +1,8 @@
 application rgbank (
   $db_username = 'test',
   $db_password = 'test',
-  $dynamic_infrastructure = false
+  $dynamic_infrastructure = false,
+  $use_dockr = false,
 ) {
 
   $db_components = collect_component_titles($nodes, Rgbank::Db)
@@ -32,9 +33,16 @@ application rgbank (
      $rgbank_web_consume = Mysqldb[$db_components[0]]
     }
 
-    rgbank::web { "${comp_name}":
-      consume => $rgbank_web_consume,
-      export  => $http,
+    if $use_docker {
+      rgbank::web::docker { $comp_name:
+        consume => $rgbank_web_consume,
+        export  => $http,
+      }
+    } else {
+      rgbank::web { "${comp_name}":
+        consume => $rgbank_web_consume,
+        export  => $http,
+      }
     }
 
     #Return HTTP service resource
