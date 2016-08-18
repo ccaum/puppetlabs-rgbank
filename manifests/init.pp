@@ -2,7 +2,7 @@ application rgbank (
   $db_username = 'test',
   $db_password = 'test',
   $dynamic_infrastructure = false,
-  $use_dockr = false,
+  $use_docker = false,
 ) {
 
   $db_components = collect_component_titles($nodes, Rgbank::Db)
