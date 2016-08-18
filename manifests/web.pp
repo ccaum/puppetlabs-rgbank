@@ -45,7 +45,7 @@ define rgbank::web (
     }
   }
 
-  firewall { '000 accept rgbank web connections':
+  firewall { "000 accept rgbank web connections for ${name}":
     dport  => $listen_port,
     proto  => tcp,
     action => accept,
