@@ -6,6 +6,8 @@ define rgbank::web::docker(
   $image_tag = 'latest',
   $listen_port = '80'
 ) {
+  include docker
+
   docker::image {'ccaum/rgbank-web': }
 
   docker::run { 'rgbank-web':
