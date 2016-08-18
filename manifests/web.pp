@@ -31,12 +31,6 @@ define rgbank::web (
       install_dir => $install_dir,
     }
 
-    firewall { '000 accept rgbank web connections':
-      dport  => $listen_port,
-      proto  => tcp,
-      action => accept,
-    }
-
     selinux::port { "allow-httpd-${listen_port}":
       context  => 'http_port_t',
       port     => $listen_port,
@@ -49,6 +43,12 @@ define rgbank::web (
       persistent => true,
       before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
     }
+  }
+
+  firewall { '000 accept rgbank web connections':
+    dport  => $listen_port,
+    proto  => tcp,
+    action => accept,
   }
 }
 

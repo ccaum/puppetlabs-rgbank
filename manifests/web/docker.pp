@@ -22,12 +22,6 @@ define rgbank::web::docker(
     ],
     command => 'apache2ctl -D FOREGROUND',
   }
-
-  firewall { '000 accept rgbank web connections':
-    dport  => $listen_port,
-    proto  => tcp,
-    action => accept,
-  }
 }
 
 Rgbank::Web produces Http {
