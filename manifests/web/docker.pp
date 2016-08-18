@@ -1,38 +1,29 @@
-class rgbank::web::docker {
-  $install_dir = "/opt/rgbank-web"
+class rgbank::web::docker(
+  $db_name,
+  $db_host,
+  $db_user,
+  $db_password,
+  $image_tag = 'latest',
   $listen_port = '80'
-  
-  archive { "rgbank-build-43":
-    ensure     => present,
-    url        => 'http://10.32.173.237/builds/rgbank-web-component/rgbank-build-43.tar.gz',
-    target     => "${install_dir}/wp-content/themes/rgbank",
-    checksum   => false,
-    src_target => '/tmp',
-    require    => Wordpress::Instance::App["rgbank_web"],
+) {
+  docker::image {'ccaum/rgbank-web': }
+
+  docker::run { 'rgbank-web':
+    image   => 'ccaum/rgbank-web',
+    ports   => [$listen_port],
+    expose  => ['80'],
+    env     => [
+      'DB_NAME'     => $db_name,
+      'DB_PASSWORD' => $db_password,
+      'DB_USER'     => $db_user,
+      'DB_HOST'     => $db_host,
+    ],
+    command => 'apache2ctl -D FOREGROUND',
   }
-  
-  wordpress::instance::app { "rgbank_web":
-    install_dir          => $install_dir,
-    install_url          => 'http://wordpress.org',
-    version              => '4.5.2',
-    wp_owner             => 'root',
-    wp_group             => '0',
-    wp_config_content    => file('rgbank/wp-config.php.docker'),
-  }
-  
-  file { "${install_dir}/wp-content/uploads":
-    ensure  => directory,
-    owner   => apache,
-    group   => apache,
-    recurse => true,
-    require => Wordpress::Instance::App["rgbank_web"],
-  }
-  
-  apache::listen { $listen_port: }
-  
-  apache::vhost { 'rgbank-web':
-    docroot       => $install_dir,
-    port          => $listen_port,
-    default_vhost => true,
+
+  firewall { '000 accept rgbank web connections':
+    dport  => $listen_port,
+    proto  => tcp,
+    action => accept,
   }
 }
