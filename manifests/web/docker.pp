@@ -1,4 +1,4 @@
-class rgbank::web::docker(
+define rgbank::web::docker(
   $db_name,
   $db_host,
   $db_user,
