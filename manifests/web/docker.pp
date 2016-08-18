@@ -13,10 +13,10 @@ class rgbank::web::docker(
     ports   => [$listen_port],
     expose  => ['80'],
     env     => [
-      'DB_NAME'     => $db_name,
-      'DB_PASSWORD' => $db_password,
-      'DB_USER'     => $db_user,
-      'DB_HOST'     => $db_host,
+      "DB_NAME=${db_name}",
+      "DB_PASSWORD=${db_password}",
+      "DB_USER=${db_user}",
+      "DB_HOST=${db_host}",
     ],
     command => 'apache2ctl -D FOREGROUND',
   }
