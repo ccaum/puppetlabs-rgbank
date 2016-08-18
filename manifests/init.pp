@@ -32,7 +32,7 @@ application rgbank (
      $rgbank_web_consume = Mysqldb[$db_components[0]]
     }
 
-    if $web_docker_components > 0 {
+    if $web_docker_components.size() > 0 {
       rgbank::web::docker { $comp_name:
         consume => $rgbank_web_consume,
         export  => $http,
