@@ -1,11 +1,11 @@
 application rgbank (
   $db_username = 'test',
   $db_password = 'test',
+  $use_docker = false,
 ) {
 
   $db_components = collect_component_titles($nodes, Rgbank::Db)
   $web_components = collect_component_titles($nodes, Rgbank::Web)
-  $web_docker_components = collect_component_titles($nodes, Rgbank::Web::Docker)
   $load_components = collect_component_titles($nodes, Rgbank::Load)
   $vinfrastructure_components = collect_component_titles($nodes, Rgbank::Infrastructure::Web)
 
@@ -32,16 +32,10 @@ application rgbank (
      $rgbank_web_consume = Mysqldb[$db_components[0]]
     }
 
-    if $web_docker_components.size() > 0 {
-      rgbank::web::docker { $comp_name:
-        consume => $rgbank_web_consume,
-        export  => $http,
-      }
-    } else {
-      rgbank::web { "${comp_name}":
-        consume => $rgbank_web_consume,
-        export  => $http,
-      }
+    rgbank::web { $comp_name:
+      use_docker => $use_docker,
+      consume    => $rgbank_web_consume,
+      export     => $http,
     }
 
     #Return HTTP service resource
