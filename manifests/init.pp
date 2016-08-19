@@ -21,6 +21,7 @@ application rgbank (
 
   $web_https = $web_components.map |$comp_name| {
     $http = Http["rgbank-web-${comp_name}"]
+    $listen_port = String(Integer($serve_port) + 10)
 
     if $vinfrastructure_components.size() > 0 {
       $vm = $comp_name.split('/')[0]
@@ -34,9 +35,10 @@ application rgbank (
     }
 
     rgbank::web { $comp_name:
-      use_docker => $use_docker,
-      consume    => $rgbank_web_consume,
-      export     => $http,
+      use_docker  => $use_docker,
+      listen_port => $listen_port,
+      consume     => $rgbank_web_consume,
+      export      => $http,
     }
 
     #Return HTTP service resource
