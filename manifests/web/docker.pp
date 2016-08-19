@@ -12,8 +12,7 @@ define rgbank::web::docker(
 
   docker::run { 'rgbank-web':
     image   => 'ccaum/rgbank-web',
-    ports   => [$listen_port],
-    expose  => ['80'],
+    ports   => ["${listen_port}:80"],
     env     => [
       "DB_NAME=${db_name}",
       "DB_PASSWORD=${db_password}",
