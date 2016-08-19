@@ -17,7 +17,7 @@ define rgbank::load (
 
   $balancermembers.each |$member| {
 
-    haproxy::balancermember { $member['host']:
+    haproxy::balancermember { "${member['host']}-${name}":
       listening_service => "rgbank-${name}",
       server_names      => $member['host'],
       ipaddresses       => $member['ip'],
