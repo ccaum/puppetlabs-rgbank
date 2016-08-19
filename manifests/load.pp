@@ -4,7 +4,8 @@ define rgbank::load (
 ) {
   include haproxy
 
-  haproxy::listen {"rgbank-${name}":
+  $sanitized_listen_name = $name.regsubst('[:/-]','_','G')
+  haproxy::listen {"rgbank-${sanitized_listen_name}":
     collect_exported => false,
     ipaddress        => '0.0.0.0',
     mode             => 'http',
@@ -12,13 +13,14 @@ define rgbank::load (
       'option'       => ['forwardfor', 'http-server-close', 'httplog'],
       'balance'      => 'roundrobin',
     },
-    ports            => $port,
+    ports            => "${port}",
   }
 
   $balancermembers.each |$member| {
 
-    haproxy::balancermember { "${member['title']}-${name}":
-      listening_service => "rgbank-${name}",
+    $sanitized_member_name = String($member).regsubst('[:/-]','_','G')
+    haproxy::balancermember { $sanitized_member_name:
+      listening_service => "rgbank-${sanitized_listen_name}",
       server_names      => $member['host'],
       ipaddresses       => $member['ip'],
       ports             => $member['port'],
@@ -32,12 +34,12 @@ define rgbank::load (
         context  => 'http_port_t',
         port     => $member['port'],
         protocol => 'tcp',
-        before   => Haproxy::Listen["rgbank-${name}"],
+        before   => Haproxy::Listen["rgbank-${sanitized_listen_name}"],
       }
     }
   }
 
-  firewall { '000 accept rgbank load balanced connections':
+  firewall { "000 accept rgbank port ${port} load balanced connections":
     dport  => $port,
     proto  => tcp,
     action => accept,
