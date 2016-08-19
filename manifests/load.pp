@@ -12,7 +12,7 @@ define rgbank::load (
       'option'       => ['forwardfor', 'http-server-close', 'httplog'],
       'balance'      => 'roundrobin',
     },
-    ports            => '80',
+    ports            => $port,
   }
 
   $balancermembers.each |$member| {

@@ -1,6 +1,7 @@
 application rgbank (
   $db_username = 'test',
   $db_password = 'test',
+  $serve_port = '80',
   $use_docker = false,
 ) {
 
@@ -46,6 +47,7 @@ application rgbank (
     #Assume we only have one load balancer component
     rgbank::load { $load_components[0]:
       balancermembers => $web_https,
+      port            => $serve_port,
       require         => $web_https,
       export          => Http[$load_components[0]],
     }
