@@ -33,6 +33,9 @@ define rgbank::db (
 Rgbank::Db produces Mysqldb {
   database => "rgbank-${name}",
   user     => $user,
-  host     => $::hostname,
+  host     => $ec2_metadata ? {
+    undef   => $::networking['interfaces'][$::networking['interfaces'].keys[0]]['ip'],
+    default => $ec2_metadata['public-ipv4'],
+  },
   password => $password
 }
