@@ -54,7 +54,7 @@ define rgbank::web (
 
 Rgbank::Web produces Http {
   name => $name,
-  ip   => $::networking['interfaces'][$::networking['interfaces'].keys[0]]['ip'],
+  ip   => $::ipaddress,
   port => $listen_port,
   host => $::fqdn,
 }
