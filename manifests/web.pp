@@ -56,7 +56,7 @@ Rgbank::Web produces Http {
   name => $name,
   ip   => $::networking['interfaces'][$::networking['interfaces'].keys[0]]['ip'],
   port => $listen_port,
-  host => $::hostname,
+  host => $::fqdn,
 }
 
 Rgbank::Web consumes Mysqldb {
