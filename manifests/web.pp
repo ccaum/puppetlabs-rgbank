@@ -31,17 +31,19 @@ define rgbank::web (
       install_dir => $install_dir,
     }
 
-    selinux::port { "allow-httpd-${listen_port}":
-      context  => 'http_port_t',
-      port     => $listen_port,
-      protocol => 'tcp',
-      before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
-    }
+    if $selinux {
+      selinux::port { "allow-httpd-${listen_port}":
+        context  => 'http_port_t',
+        port     => $listen_port,
+        protocol => 'tcp',
+        before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
+      }
 
-    selinux::boolean { 'httpd_can_network_connect':
-      ensure     => true,
-      persistent => true,
-      before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
+      selinux::boolean { 'httpd_can_network_connect':
+        ensure     => true,
+        persistent => true,
+        before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
+      }
     }
   }
 
