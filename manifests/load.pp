@@ -3,21 +3,11 @@ define rgbank::load (
   $port = 80,
 ) {
   include haproxy
+  require rgbank::load::frontend
 
   $sanitized_listen_name = $name.regsubst('[:/-]','_','G')
-  haproxy::listen {"rgbank-${sanitized_listen_name}":
-    collect_exported => false,
-    ipaddress        => '0.0.0.0',
-    mode             => 'http',
-    options          => {
-      'option'       => ['forwardfor', 'http-server-close', 'httplog'],
-      'balance'      => 'roundrobin',
-    },
-    ports            => "${port}",
-  }
 
   $balancermembers.each |$member| {
-
     $sanitized_member_name = String($member).regsubst('[:/-]','_','G')
     haproxy::balancermember { $sanitized_member_name:
       listening_service => "rgbank-${sanitized_listen_name}",
