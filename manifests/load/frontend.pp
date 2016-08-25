@@ -1,19 +1,23 @@
 class rgbank::load::frontend {
-  $options = {}
+  $load_resources = find_resources(Rgbank::Load)
 
-  $instances = find_resources(Rgbank::Load).map |$app_load| {
-    $options.merge(
-      {
-        "acl ${app_load['name']}" => ['path_beg', "/${app_load['name']}"],
-        "use_backend ${app_load['name']}" => ['if', $app_load['name']],
-      }
-    )
+  $acl_configs = $load_resources.map |$app_load| {
+    $resource_title = $app_load.get_resource_title().split('/')[-1]
+    "${resource_title} path_beg /${resource_title}"
   }
-    
+
+  $use_backend_configs = $load_resources.map |$app_load| {
+    $resource_title = $app_load.get_resource_title().split('/')[-1]
+    "${resource_title} if ${resource_title}"
+  }
+
   haproxy::frontend { 'rgbank':
     ipaddress => '0.0.0.0',
     ports     => '80',
     mode      => 'http',
-    options   => $options,
+    options   => {
+     'use_backend' => $use_backend_configs,
+     'acl'         => $acl_configs,
+    }
   }
 }

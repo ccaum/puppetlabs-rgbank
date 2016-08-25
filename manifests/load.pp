@@ -3,14 +3,26 @@ define rgbank::load (
   $port = 80,
 ) {
   include haproxy
-  require rgbank::load::frontend
+  include rgbank::load::frontend
 
-  $sanitized_listen_name = $name.regsubst('[:/-]','_','G')
+  $sanitized_backend_name = $name.regsubst('[:/-]','_','G')
+  $service_name = $name.split('/')[-1]
+  haproxy::backend { $sanitized_backend_name:
+    mode    => 'http',
+    options => {
+      'option'  => [
+        'forwardfor',
+        'httpchk GET / HTTP/1.0',
+      ],
+      'reqrep' => "^([^\ :]*)\ /${service_name}(.*) \1\ /\2",
+      'balance' => 'roundrobin',
+    },
+  }
 
   $balancermembers.each |$member| {
     $sanitized_member_name = String($member).regsubst('[:/-]','_','G')
     haproxy::balancermember { $sanitized_member_name:
-      listening_service => "rgbank-${sanitized_listen_name}",
+      listening_service => $sanitized_backend_name,
       server_names      => $member['host'],
       ipaddresses       => $member['ip'],
       ports             => $member['port'],
