@@ -7,7 +7,7 @@ define rgbank::load (
 
   $sanitized_backend_name = $name.regsubst('[:/-]','_','G')
   $service_name = $name.split('_')[-1]
-  haproxy::backend { $service_name:
+  haproxy::backend { $sanitized_backend_name:
     mode    => 'http',
     options => {
       'option'  => [
