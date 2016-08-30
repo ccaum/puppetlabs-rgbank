@@ -36,7 +36,7 @@ define rgbank::load (
         context  => 'http_port_t',
         port     => $member['port'],
         protocol => 'tcp',
-        before   => Haproxy::Listen["rgbank-${sanitized_listen_name}"],
+        before   => Haproxy::Frontend["rgbank"],
       }
     }
   }
