@@ -24,7 +24,7 @@ application rgbank (
     $listen_port = String(Integer($serve_port) + 10)
 
     if $vinfrastructure_components.size() > 0 {
-      $vm = $comp_name.split('/')[0]
+      $vm = $comp_name.split('_')[0]
       $rgbank_web_consume = [Mysqldb[$db_components[0]], Vinfrastructure[$vm]]
 
       rgbank::infrastructure::web { $vm:
