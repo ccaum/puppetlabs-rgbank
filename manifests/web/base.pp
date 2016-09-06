@@ -17,7 +17,7 @@ define rgbank::web::base(
     $install_dir_real = "/opt/rgbank-${name}"
   }
 
-  archive { "rgbank-build-${version}":
+  archive { "rgbank-build-${version}-${name}":
     ensure     => present,
     url        => $source,
     target     => "${install_dir_real}/wp-content/themes/rgbank",
@@ -60,8 +60,10 @@ define rgbank::web::base(
 
   apache::listen { $listen_port: }
 
-  apache::vhost { $::fqdn:
-    docroot => $install_dir_real,
-    port    => $listen_port,
+  if (! defined(Apache::Vhost[$fqdn])) {
+    apache::vhost { $::fqdn:
+      docroot => $install_dir_real,
+      port    => $listen_port,
+    }
   }
 }

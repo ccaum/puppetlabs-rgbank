@@ -1,7 +1,7 @@
 application rgbank (
   $db_username = 'test',
   $db_password = 'test',
-  $serve_port = '80',
+  $listen_port = '80',
   $use_docker = false,
 ) {
 
@@ -21,7 +21,6 @@ application rgbank (
 
   $web_https = $web_components.map |$comp_name| {
     $http = Http["rgbank-web-${comp_name}"]
-    $listen_port = String(Integer($serve_port) + 10)
 
     if $vinfrastructure_components.size() > 0 {
       $vm = $comp_name.split('_')[0]
@@ -36,7 +35,7 @@ application rgbank (
 
     rgbank::web { $comp_name:
       use_docker  => $use_docker,
-      listen_port => $listen_port,
+      listen_port => String($listen_port),
       consume     => $rgbank_web_consume,
       export      => $http,
     }

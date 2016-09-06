@@ -7,7 +7,7 @@ define rgbank::load (
 
   $sanitized_backend_name = $name.regsubst('[:/-]','_','G')
   $service_name = $name.split('_')[-1]
-  haproxy::backend { $sanitized_backend_name:
+  haproxy::backend { $service_name:
     mode    => 'http',
     options => {
       'option'  => [
@@ -22,7 +22,7 @@ define rgbank::load (
   $balancermembers.each |$member| {
     $sanitized_member_name = String($member).regsubst('[:/-]','_','G')
     haproxy::balancermember { $sanitized_member_name:
-      listening_service => $sanitized_backend_name,
+      listening_service => $service_name,
       server_names      => $member['host'],
       ipaddresses       => $member['ip'],
       ports             => $member['port'],
@@ -31,7 +31,7 @@ define rgbank::load (
 
     $member_port = $member['port']
     $port_name = "allow-httpd-${member_port}"
-    if ! defined(Selinux::Port[$port_name]) {
+    if $selinux {
       selinux::port { $port_name:
         context  => 'http_port_t',
         port     => $member['port'],
@@ -41,10 +41,12 @@ define rgbank::load (
     }
   }
 
-  firewall { "000 accept rgbank port ${port} load balanced connections":
-    dport  => $port,
-    proto  => tcp,
-    action => accept,
+  if (! defined(Firewall["000 accept rgbank port ${port} load balanced connections"])) {
+    firewall { "000 accept rgbank port ${port} load balanced connections":
+      dport  => $port,
+      proto  => tcp,
+      action => accept,
+    }
   }
 }
 
