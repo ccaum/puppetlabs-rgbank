@@ -1,5 +1,5 @@
 $host = $_SERVER["HTTP_HOST"];
-$base_url = "http://" . $host . '/<%= @name.split('/')[-1] %>';
+$base_url = "http://" . $host . '/<%= @name.split('_')[-1] %>';
 define('WP_HOME', $base_url);
 define('WP_SITEURL', $base_url);
 
