@@ -21,7 +21,7 @@ application rgbank (
     rgbank::web { $comp_name:
       use_docker  => $use_docker,
       listen_port => String($listen_port),
-      consume     => Database[$db_components[0]],
+      consume     => Database[$db_component],
       export      => $http,
     }
 
