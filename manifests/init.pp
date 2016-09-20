@@ -13,7 +13,7 @@ application rgbank (
   rgbank::db { $db_component:
     user     => $db_username,
     password => $db_password,
-    export   => Database[$db_components[0]],
+    export   => Database[$db_component],
   }
 
   $web_https = $web_components.map |$comp_name| {
@@ -21,13 +21,13 @@ application rgbank (
 
     if $vinfrastructure_components.size() > 0 {
       $vm = $comp_name.split('_')[0]
-      $rgbank_web_consume = [Database[$db_components[0]], Vinfrastructure[$vm]]
+      $rgbank_web_consume = [Database[$db_component], Vinfrastructure[$vm]]
 
       rgbank::infrastructure::web { $vm:
         export => Vinfrastructure[$vm],
       }
     } else {
-     $rgbank_web_consume = Database[$db_components[0]]
+     $rgbank_web_consume = Database[$db_component]
     }
 
     rgbank::web { $comp_name:
@@ -45,6 +45,6 @@ application rgbank (
     balancermembers => $web_https,
     port            => $serve_port,
     require         => $web_https,
-    export          => Http[$load_components[0]],
+    export          => Http[$load_component],
   }
 }
