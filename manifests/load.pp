@@ -1,6 +1,6 @@
 define rgbank::load (
   $balancermembers,
-  $port = 80,
+  $port = '80',
 ) {
   include haproxy
 
