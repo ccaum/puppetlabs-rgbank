@@ -15,7 +15,7 @@ application rgbank (
     rgbank::db { $db_components[0]:
       user     => $db_username,
       password => $db_password,
-      export   => Mysqldb[$db_components[0]],
+      export   => Database[$db_components[0]],
     }
   }
 
@@ -24,13 +24,13 @@ application rgbank (
 
     if $vinfrastructure_components.size() > 0 {
       $vm = $comp_name.split('_')[0]
-      $rgbank_web_consume = [Mysqldb[$db_components[0]], Vinfrastructure[$vm]]
+      $rgbank_web_consume = [Database[$db_components[0]], Vinfrastructure[$vm]]
 
       rgbank::infrastructure::web { $vm:
         export => Vinfrastructure[$vm],
       }
     } else {
-     $rgbank_web_consume = Mysqldb[$db_components[0]]
+     $rgbank_web_consume = Database[$db_components[0]]
     }
 
     rgbank::web { $comp_name:

@@ -30,7 +30,7 @@ Rgbank::Web produces Http {
   host => $::hostname,
 }
 
-Rgbank::Web consumes Mysqldb {
+Rgbank::Web consumes Database {
   db_name     => $database,
   db_host     => $host,
   db_user     => $user,
