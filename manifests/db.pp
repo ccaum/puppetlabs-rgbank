@@ -1,7 +1,7 @@
 define rgbank::db (
   $user,
   $password,
-  $mock_sql_source = hiera('rgbank-mock-sql-path', ''),
+  $mock_sql_source = hiera('rgbank-mock-sql-path', 'https://raw.githubusercontent.com/puppetlabs/rgbank/master/rgbank.sql'),
 ) {
   $db_name = "rgbank-${name}"
 
