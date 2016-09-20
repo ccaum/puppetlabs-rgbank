@@ -12,7 +12,7 @@ application rgbank (
   rgbank::db { $db_component:
     user     => $db_username,
     password => $db_password,
-    export   => Database[$db_components[0]],
+    export   => Database[$db_component],
   }
 
   $web_https = $web_components.map |$comp_name| {
@@ -33,6 +33,6 @@ application rgbank (
     balancermembers => $web_https,
     port            => $serve_port,
     require         => $web_https,
-    export          => Http[$load_components[0]],
+    export          => Http[$load_component],
   }
 }
