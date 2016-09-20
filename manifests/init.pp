@@ -8,7 +8,6 @@ application rgbank (
   $db_component = collect_component_titles($nodes, Rgbank::Db)[0] #Assume we only have one
   $web_components = collect_component_titles($nodes, Rgbank::Web)
   $load_component = collect_component_titles($nodes, Rgbank::Load)[0] #Assume we only have one
-  $vinfrastructure_components = collect_component_titles($nodes, Rgbank::Infrastructure::Web)
 
   rgbank::db { $db_component:
     user     => $db_username,
@@ -19,21 +18,10 @@ application rgbank (
   $web_https = $web_components.map |$comp_name| {
     $http = Http["rgbank-web-${comp_name}"]
 
-    if $vinfrastructure_components.size() > 0 {
-      $vm = $comp_name.split('_')[0]
-      $rgbank_web_consume = [Database[$db_component], Vinfrastructure[$vm]]
-
-      rgbank::infrastructure::web { $vm:
-        export => Vinfrastructure[$vm],
-      }
-    } else {
-     $rgbank_web_consume = Database[$db_component]
-    }
-
     rgbank::web { $comp_name:
       use_docker  => $use_docker,
       listen_port => String($listen_port),
-      consume     => $rgbank_web_consume,
+      consume     => Database[$db_components[0]],
       export      => $http,
     }
 
