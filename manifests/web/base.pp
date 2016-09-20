@@ -17,12 +17,21 @@ define rgbank::web::base(
     $install_dir_real = "/opt/rgbank-${name}"
   }
 
-  archive { "rgbank-build-${version}-${name}":
-    ensure     => present,
-    url        => $source,
-    target     => "${install_dir_real}/wp-content/themes/rgbank",
-    checksum   => false,
-    src_target => '/tmp'
+  if $source =~ /^https:\/\/github.com/ {
+    vcsrepo { "${install_dir_real}/wp-content/themes/rgbank":
+      ensure   => present,
+      provider => git,
+      source   => $source,
+      revision => $version,
+    }
+  } else {
+    archive { "rgbank-build-${version}-${name}":
+      ensure     => present,
+      url        => $source,
+      target     => "${install_dir_real}/wp-content/themes/rgbank",
+      checksum   => false,
+      src_target => '/tmp'
+    }
   }
 
   wordpress::instance::app { "rgbank_${name}":
