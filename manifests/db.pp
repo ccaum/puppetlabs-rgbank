@@ -30,7 +30,7 @@ define rgbank::db (
   }
 }
 
-Rgbank::Db produces Mysqldb {
+Rgbank::Db produces Database {
   database => "rgbank-${name}",
   user     => $user,
   host     => $ec2_metadata ? {
