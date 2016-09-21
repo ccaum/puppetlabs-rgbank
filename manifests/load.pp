@@ -2,15 +2,19 @@ define rgbank::load (
   $balancermembers,
   $port = '80',
 ) {
-  include haproxy
+  include ::haproxy
 
-  haproxy::listen {"rgank-${name}":
+  haproxy::listen {"rgbank-${name}":
     collect_exported => false,
     ipaddress        => '0.0.0.0',
     mode             => 'http',
     options          => {
-      'option'       => ['forwardfor', 'http-server-close', 'httplog'],
-      'balance'      => 'roundrobin',
+      'option'  => [
+        'forwardfor',
+        'http-server-close',
+        'httplog',
+      ],
+      'balance' => 'roundrobin',
     },
     ports            => $port,
   }
