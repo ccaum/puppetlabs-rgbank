@@ -1,15 +1,14 @@
 define rgbank::web::base(
-  $db_name = undef,
-  $db_user = undef,
-  $db_password = undef,
-  $db_host = undef,
   $version,
   $source,
   $listen_port,
   $install_dir,
+  $db_name = undef,
+  $db_user = undef,
+  $db_password = undef,
+  $db_host = undef,
   $custom_wp_config = undef,
 ) {
-  include apache
 
   if $install_dir {
     $install_dir_real = $install_dir
@@ -30,7 +29,7 @@ define rgbank::web::base(
       url        => $source,
       target     => "${install_dir_real}/wp-content/themes/rgbank",
       checksum   => false,
-      src_target => '/tmp'
+      src_target => '/tmp',
     }
   }
 
@@ -69,7 +68,7 @@ define rgbank::web::base(
 
   apache::listen { $listen_port: }
 
-  if (! defined(Apache::Vhost[$fqdn])) {
+  if (! defined(Apache::Vhost[$::fqdn])) {
     apache::vhost { $::fqdn:
       docroot => $install_dir_real,
       port    => $listen_port,
