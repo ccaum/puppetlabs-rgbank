@@ -18,12 +18,28 @@ define rgbank::web::base(
   }
 
   if $source =~ /^https:\/\/github.com/ {
-    vcsrepo { "${install_dir_real}/wp-content/themes/rgbank":
+
+    file { "${install_dir_real}/git":
+      ensure => directory,
+      owner  => root,
+      group  => root,
+      mode   => '0755',
+    }
+
+    vcsrepo { "${install_dir_real}/git/rgbank":
       ensure   => present,
       provider => git,
       source   => $source,
       revision => $version,
+      require  => File["${install_dir_real}/git"],
     }
+
+    file { "${install_dir_real}/wp-content/themes/rgbank":
+      ensure  => link,
+      target  => "${install_dir_real}/git/rgbank/src",
+      require => Vcsrepo["${install_dir_real}/git/rgbank"],
+    }
+
   } else {
     archive { "rgbank-build-${version}-${name}":
       ensure     => present,
