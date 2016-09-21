@@ -63,6 +63,7 @@ Rgbank::Web produces Http {
   ip   => $::ipaddress,
   port => $listen_port,
   host => $::fqdn,
+  path => '/',
 }
 
 Rgbank::Web consumes Database {
