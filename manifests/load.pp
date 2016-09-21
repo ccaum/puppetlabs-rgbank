@@ -1,28 +1,28 @@
 define rgbank::load (
   $balancermembers,
-  $port = 80,
+  $port = '80',
 ) {
-  include haproxy
-  include rgbank::load::frontend
+  include ::haproxy
 
-  $sanitized_backend_name = $name.regsubst('[:/-]','_','G')
-  $service_name = $name.split('_')[-1]
-  haproxy::backend { $service_name:
-    mode    => 'http',
-    options => {
+  haproxy::listen {"rgbank-${name}":
+    collect_exported => false,
+    ipaddress        => '0.0.0.0',
+    mode             => 'http',
+    options          => {
       'option'  => [
         'forwardfor',
-        'httpchk GET / HTTP/1.0',
+        'http-server-close',
+        'httplog',
       ],
-      'reqrep' => "^([^\ :]*)\ /${service_name}(.*) \1\ /\2",
       'balance' => 'roundrobin',
     },
+    ports            => $port,
   }
 
   $balancermembers.each |$member| {
-    $sanitized_member_name = String($member).regsubst('[:/-]','_','G')
-    haproxy::balancermember { $sanitized_member_name:
-      listening_service => $service_name,
+
+    haproxy::balancermember { $member['host']:
+      listening_service => "rgbank-${name}",
       server_names      => $member['host'],
       ipaddresses       => $member['ip'],
       ports             => $member['port'],
@@ -31,22 +31,20 @@ define rgbank::load (
 
     $member_port = $member['port']
     $port_name = "allow-httpd-${member_port}"
-    if $selinux {
+    if ! defined(Selinux::Port[$port_name]) {
       selinux::port { $port_name:
         context  => 'http_port_t',
         port     => $member['port'],
         protocol => 'tcp',
-        before   => Haproxy::Frontend["rgbank"],
+        before   => Haproxy::Listen["rgbank-${name}"],
       }
     }
   }
 
-  if (! defined(Firewall["000 accept rgbank port ${port} load balanced connections"])) {
-    firewall { "000 accept rgbank port ${port} load balanced connections":
-      dport  => $port,
-      proto  => tcp,
-      action => accept,
-    }
+  firewall { "000 accept rgbank ${name} load balanced connections":
+    dport  => $port,
+    proto  => tcp,
+    action => accept,
   }
 }
 
