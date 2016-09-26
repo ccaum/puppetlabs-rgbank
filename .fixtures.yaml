@@ -11,5 +11,7 @@ fixtures:
     selinux: "https://github.com/voxpupuli/puppet-selinux.git"
     vcsrepo: "https://github.com/puppetlabs/puppetlabs-vcsrepo.git"
     staging: "https://github.com/voxpupuli/puppet-staging"
+    docker: "https://github.com/garethr/garethr-docker.git"
+    epel: "https://github.com/stahnma/puppet-module-epel.git"
   symlinks:
     rgbank: "#{source_dir}"

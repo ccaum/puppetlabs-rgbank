@@ -30,6 +30,7 @@ describe 'rgbank', :type => :application do
 
         let :params do
           {
+            :use_docker => true,
             :nodes => {
               ref('Node', node) => [
                 ref('Rgbank::Load', 'getting-started'),
@@ -40,10 +41,8 @@ describe 'rgbank', :type => :application do
           }
         end
 
-        context 'with defaults for all parameters' do
+        context 'with docker' do
           let(:pre_condition){'
-            class {"::apache": default_vhost => false, }
-            include ::apache::mod::php
             include ::mysql::client
             class {"::mysql::bindings": php_enable => true, }
           '}
@@ -52,7 +51,7 @@ describe 'rgbank', :type => :application do
                         'listen_port' => '80',
                         'db_username' => 'test',
                         'db_password' => 'test',
-                        'use_docker' => false,
+                        'use_docker' => true,
                       ) }
           it { should contain_rgbank__db('getting-started').with(
                         'user'            => 'test',
@@ -60,38 +59,13 @@ describe 'rgbank', :type => :application do
                         'port'            => '3306',
                         'mock_sql_source' => 'https://raw.githubusercontent.com/puppetlabs/rgbank/master/rgbank.sql',
                       ) }
-          it { should contain_rgbank__web("#{node}_getting-started").with(
-                        'db_host'     => '10.0.2.15',
-                        'db_name'     => 'rgbank-getting-started',
-                        'db_user'     => 'test',
-                        'db_password' => 'test',
-                        'version'     => 'master',
-                        'source'      => 'https://github.com/puppetlabs/rgbank',
-                        'listen_port' => '80',
-                        'install_dir' =>  nil,
-                        'image_tag'   => 'latest',
-                      ) }
           it { should contain_rgbank__load('getting-started').with(
                         'port' => '80',
-                      ) }
-
-          it { should contain_file('/opt/rgbank-test.puppet.com_getting-started/git').with(
-                        'ensure' => 'directory',
-                      ) }
-
-          it { should contain_file('/opt/rgbank-test.puppet.com_getting-started/wp-content/uploads').with(
-                        'ensure' => 'directory',
                       ) }
 
           it { should contain_file('/var/lib/rgbank-getting-started').with(
                         'ensure' => 'directory',
                       ) }
-
-          it { should contain_file('/opt/rgbank-test.puppet.com_getting-started/wp-content/themes/rgbank').with(
-                        'ensure' => 'link',
-                      ) }
-
-          it { should contain_vcsrepo('/opt/rgbank-test.puppet.com_getting-started/git/rgbank') }
 
           it { should contain_firewall('000 accept rgbank getting-started load balanced connections') }
           it { should contain_firewall('000 accept rgbank web connections for test.puppet.com_getting-started') }
@@ -103,28 +77,26 @@ describe 'rgbank', :type => :application do
           it { should contain_http('rgbank-web-test.puppet.com_getting-started') }
 
           # Check for  defines (these are tested in their own modules so just validating they are present)
-          it { should contain_apache__listen('80') }
-          it { should contain_apache__vhost('foo.example.com') }
           it { should contain_haproxy__balancermember('foo.example.com') }
           it { should contain_haproxy__listen('rgbank-getting-started') }
           it { should contain_mysql__db('rgbank-getting-started') }
           it { should contain_selinux__port('allow-httpd-80') }
           it { should contain_staging__file('rgbank-rgbank-getting-started.sql') }
 
-          it { should contain_rgbank__web__base('test.puppet.com_getting-started').with(
-            'version'     => 'master',
-            'source'      => 'https://github.com/puppetlabs/rgbank',
-            'listen_port' => '80',
-            'install_dir' => nil,
-          ) }
-
-          it { should contain_wordpress__instance__app('rgbank_test.puppet.com_getting-started').with(
+          it { should contain_rgbank__web__docker('test.puppet.com_getting-started').with(
             'db_host'           => '10.0.2.15',
             'db_name'           => 'rgbank-getting-started',
             'db_user'           => 'test',
             'db_password'       => 'test',
-            'wp_config_content' => nil,
-          )}
+            'listen_port'       => '80',
+            'image_tag'         => 'latest',
+          ) }
+
+          it { should contain_docker__image('ccaum/rgbank-web') }
+          it { should contain_docker__run('rgbank-web') }
+          it { should contain_package('device-mapper').with( 'ensure' => 'present', )}
+          it { should contain_package('docker').with( 'ensure' => 'present', )}
+
         end
       end
     end
