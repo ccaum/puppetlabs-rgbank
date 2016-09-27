@@ -48,7 +48,7 @@ describe 'rgbank', :type => :application do
           '}
           it { should compile }
           it { should contain_rgbank(title).with(
-                        'listen_port' => '80',
+                        'listen_port' => '8060',
                         'db_username' => 'test',
                         'db_password' => 'test',
                         'use_docker' => true,
@@ -80,7 +80,6 @@ describe 'rgbank', :type => :application do
           it { should contain_haproxy__balancermember('foo.example.com') }
           it { should contain_haproxy__listen('rgbank-getting-started') }
           it { should contain_mysql__db('rgbank-getting-started') }
-          it { should contain_selinux__port('allow-httpd-80') }
           it { should contain_staging__file('rgbank-rgbank-getting-started.sql') }
 
           it { should contain_rgbank__web__docker('test.puppet.com_getting-started').with(
@@ -88,7 +87,7 @@ describe 'rgbank', :type => :application do
             'db_name'           => 'rgbank-getting-started',
             'db_user'           => 'test',
             'db_password'       => 'test',
-            'listen_port'       => '80',
+            'listen_port'       => '8060',
             'image_tag'         => 'latest',
           ) }
 

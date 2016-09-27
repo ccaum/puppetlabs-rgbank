@@ -49,7 +49,7 @@ describe 'rgbank', :type => :application do
           '}
           it { should compile }
           it { should contain_rgbank(title).with(
-                        'listen_port' => '80',
+                        'listen_port' => '8060',
                         'db_username' => 'test',
                         'db_password' => 'test',
                         'use_docker' => false,
@@ -67,7 +67,7 @@ describe 'rgbank', :type => :application do
                         'db_password' => 'test',
                         'version'     => 'master',
                         'source'      => 'https://github.com/puppetlabs/rgbank',
-                        'listen_port' => '80',
+                        'listen_port' => '8060',
                         'install_dir' =>  nil,
                         'image_tag'   => 'latest',
                       ) }
@@ -103,18 +103,17 @@ describe 'rgbank', :type => :application do
           it { should contain_http('rgbank-web-test.puppet.com_getting-started') }
 
           # Check for  defines (these are tested in their own modules so just validating they are present)
-          it { should contain_apache__listen('80') }
+          it { should contain_apache__listen('8060') }
           it { should contain_apache__vhost('foo.example.com') }
           it { should contain_haproxy__balancermember('foo.example.com') }
           it { should contain_haproxy__listen('rgbank-getting-started') }
           it { should contain_mysql__db('rgbank-getting-started') }
-          it { should contain_selinux__port('allow-httpd-80') }
           it { should contain_staging__file('rgbank-rgbank-getting-started.sql') }
 
           it { should contain_rgbank__web__base('test.puppet.com_getting-started').with(
             'version'     => 'master',
             'source'      => 'https://github.com/puppetlabs/rgbank',
-            'listen_port' => '80',
+            'listen_port' => '8060',
             'install_dir' => nil,
           ) }
 
