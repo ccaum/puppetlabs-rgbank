@@ -3,6 +3,7 @@ require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
 
 run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
+install_puppet_agent_on(hosts, :version => '1.7.0')
 
 RSpec.configure do |c|
   # Project root
@@ -14,9 +15,19 @@ RSpec.configure do |c|
   # Configure all nodes in nodeset
   c.before :suite do
     # Install module and dependencies
-    puppet_module_install(:source => proj_root, :module_name => 'ntp')
+    puppet_module_install(:source => proj_root, :module_name => 'rgbank')
     hosts.each do |host|
+      on host, puppet('config', 'set', 'app_management', 'true'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'hunner-wordpress'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'jfryman-selinux'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppetlabs-apache'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppetlabs-app_modeling'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppetlabs-firewall'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppetlabs-haproxy'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppetlabs-mysql'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppetlabs-vcsrepo'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'gareth-docker'), { :acceptable_exit_codes => [0,1] }
     end
   end
 end
