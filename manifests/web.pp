@@ -31,7 +31,7 @@ define rgbank::web (
       install_dir => $install_dir,
     }
 
-    if $selinux {
+    if $::selinux == true {
       if (! defined(Selinux::Port["allow-httpd-${listen_port}"])) {
         selinux::port { "allow-httpd-${listen_port}":
           context  => 'http_port_t',
@@ -41,11 +41,11 @@ define rgbank::web (
         }
       }
 
-      if (! defined(Selinux::Boolean["httpd_can_network_connect"])) {
+      if (! defined(Selinux::Boolean['httpd_can_network_connect'])) {
         selinux::boolean { 'httpd_can_network_connect':
           ensure     => true,
           persistent => true,
-          before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
+          before     => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
         }
       }
     }
