@@ -31,12 +31,15 @@ define rgbank::load (
 
     $member_port = $member['port']
     $port_name = "allow-httpd-${member_port}"
-    if ! defined(Selinux::Port[$port_name]) {
-      selinux::port { $port_name:
-        context  => 'http_port_t',
-        port     => $member['port'],
-        protocol => 'tcp',
-        before   => Haproxy::Listen["rgbank-${name}"],
+
+    if $::selinux == true {
+      if ! defined(Selinux::Port[$port_name]) {
+        selinux::port { $port_name:
+          context  => 'http_port_t',
+          port     => $member['port'],
+          protocol => 'tcp',
+          before   => Haproxy::Listen["rgbank-${name}"],
+        }
       }
     }
   }

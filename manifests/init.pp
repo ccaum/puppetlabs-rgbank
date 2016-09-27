@@ -1,8 +1,9 @@
 application rgbank (
   $db_username = 'test',
   $db_password = 'test',
-  $listen_port = '80',
-  $use_docker = false,
+  $listen_port = '8060',
+  $use_docker  = false,
+  $lb_port     = '80',
 ) {
 
   $db_component = collect_component_titles($nodes, Rgbank::Db)[0] #Assume we only have one
@@ -31,7 +32,7 @@ application rgbank (
 
   rgbank::load { $load_component:
     balancermembers => $web_https,
-    port            => $serve_port,
+    port            => $lb_port,
     require         => $web_https,
     export          => Http[$load_component],
   }

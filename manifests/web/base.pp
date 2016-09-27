@@ -16,6 +16,31 @@ define rgbank::web::base(
     $install_dir_real = "/opt/rgbank-${name}"
   }
 
+  wordpress::instance::app { "rgbank_${name}":
+    install_dir          => $install_dir_real,
+    install_url          => 'http://wordpress.org',
+    version              => '4.3.6',
+    db_host              => $db_host,
+    db_name              => $db_name,
+    db_user              => $db_user,
+    db_password          => $db_password,
+    wp_owner             => 'root',
+    wp_group             => '0',
+    wp_lang              => '',
+    wp_config_content    => $custom_wp_config,
+    wp_plugin_dir        => 'DEFAULT',
+    wp_additional_config => 'DEFAULT',
+    wp_table_prefix      => 'wp_',
+    wp_proxy_host        => '',
+    wp_proxy_port        => '',
+    wp_multisite         => false,
+    wp_site_domain       => '',
+    wp_debug             => false,
+    wp_debug_log         => false,
+    wp_debug_display     => false,
+    notify               => Service['httpd'],
+  }
+
   if $source =~ /^https:\/\/github.com/ {
 
     file { "${install_dir_real}/git":
@@ -36,7 +61,10 @@ define rgbank::web::base(
     file { "${install_dir_real}/wp-content/themes/rgbank":
       ensure  => link,
       target  => "${install_dir_real}/git/rgbank/src",
-      require => Vcsrepo["${install_dir_real}/git/rgbank"],
+      require => [
+        Vcsrepo["${install_dir_real}/git/rgbank"],
+        Wordpress::Instance::App["rgbank_${name}"],
+      ],
     }
 
   } else {
@@ -46,32 +74,10 @@ define rgbank::web::base(
       target     => "${install_dir_real}/wp-content/themes/rgbank",
       checksum   => false,
       src_target => '/tmp',
+      require    => [
+        Wordpress::Instance::App["rgbank_${name}"],
+      ],
     }
-  }
-
-  wordpress::instance::app { "rgbank_${name}":
-    install_dir          => $install_dir_real,
-    install_url          => 'http://wordpress.org',
-    version              => '4.5.2',
-    db_host              => $db_host,
-    db_name              => $db_name,
-    db_user              => $db_user,
-    db_password          => $db_password,
-    wp_owner             => 'root',
-    wp_group             => '0',
-    wp_lang              => '',
-    wp_config_content    => $custom_wp_config,
-    wp_plugin_dir        => 'DEFAULT',
-    wp_additional_config => 'DEFAULT',
-    wp_table_prefix      => 'wp_',
-    wp_proxy_host        => '',
-    wp_proxy_port        => '',
-    wp_multisite         => false,
-    wp_site_domain       => '',
-    wp_debug             => false,
-    wp_debug_log         => false,
-    wp_debug_display     => false,
-    notify               => Service['httpd'],
   }
 
   file { "${install_dir_real}/wp-content/uploads":
