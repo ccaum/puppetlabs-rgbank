@@ -29,7 +29,6 @@ define rgbank::web (
       source           => $source,
       listen_port      => $listen_port,
       install_dir      => $install_dir,
-      custom_wp_config => 'rgbank/wp-proxy-config.php.erb',
     }
 
     if $::selinux == true {

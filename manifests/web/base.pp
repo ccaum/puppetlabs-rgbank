@@ -29,7 +29,7 @@ define rgbank::web::base(
     wp_lang              => '',
     wp_config_content    => $custom_wp_config,
     wp_plugin_dir        => 'DEFAULT',
-    wp_additional_config => 'DEFAULT',
+    wp_additional_config => 'rgbank/wp-proxy-config.php.erb',
     wp_table_prefix      => 'wp_',
     wp_proxy_host        => '',
     wp_proxy_port        => '',
