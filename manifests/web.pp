@@ -21,14 +21,15 @@ define rgbank::web (
     }
   } else {
     rgbank::web::base { $name:
-      db_name     => $db_name,
-      db_user     => $db_user,
-      db_password => $db_password,
-      db_host     => $db_host,
-      version     => $version,
-      source      => $source,
-      listen_port => $listen_port,
-      install_dir => $install_dir,
+      db_name          => $db_name,
+      db_user          => $db_user,
+      db_password      => $db_password,
+      db_host          => $db_host,
+      version          => $version,
+      source           => $source,
+      listen_port      => $listen_port,
+      install_dir      => $install_dir,
+      custom_wp_config => 'rgbank/wp-proxy-config.php.erb',
     }
 
     if $::selinux == true {
