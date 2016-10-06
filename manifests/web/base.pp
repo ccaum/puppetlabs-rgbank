@@ -98,10 +98,8 @@ define rgbank::web::base(
     }
   }
 
-  if (! defined(Nginx::Resource::Vhost["${::fqdn}-${name}])) {
-    nginx::resource::vhost { "${::fqdn}-${name}":
-      listen_port => $listen_port,
-      www_root    => $install_dir_real,
-    }
+  nginx::resource::vhost { "${::fqdn}-${name}":
+    listen_port => $listen_port,
+    www_root    => $install_dir_real,
   }
 }
