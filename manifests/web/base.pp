@@ -38,7 +38,7 @@ define rgbank::web::base(
     wp_debug             => false,
     wp_debug_log         => false,
     wp_debug_display     => false,
-    notify               => Service['httpd'],
+    notify               => Service['nginx'],
   }
 
   if $source =~ /^https:\/\/github.com/ {
