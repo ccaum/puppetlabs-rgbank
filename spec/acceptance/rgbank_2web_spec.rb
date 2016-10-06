@@ -6,6 +6,7 @@ describe 'rgbank web define' do
       # Using puppet_apply as a helper
       it 'should work idempotently with no errors' do
         pp = <<-EOS
+        package {'wget': ensure => present, }
         class { 'apache': default_vhost => false, }
         class { 'apache::mod::php': }
         class {'::mysql::client': }

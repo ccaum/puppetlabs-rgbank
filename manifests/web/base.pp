@@ -88,6 +88,16 @@ define rgbank::web::base(
     require => Wordpress::Instance::App["rgbank_${name}"],
   }
 
+  if $::selinux == true {
+    exec{"selinux-update-${install_dir_real}":
+      path        => $::path,
+      command     => "chcon -R system_u:object_r:usr_t:s0 ${install_dir_real}",
+      subscribe   => Wordpress::Instance::App["rgbank_${name}"],
+      refreshonly => true,
+      require     => File["${install_dir_real}/wp-content/uploads"],
+    }
+  }
+
   apache::listen { $listen_port: }
 
   if (! defined(Apache::Vhost[$::fqdn])) {
