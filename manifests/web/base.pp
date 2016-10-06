@@ -82,8 +82,8 @@ define rgbank::web::base(
 
   file { "${install_dir_real}/wp-content/uploads":
     ensure  => directory,
-    owner   => apache,
-    group   => apache,
+    owner   => $::nginx::config::global_owner,
+    group   => $::nginx::config::global_group,
     recurse => true,
     require => Wordpress::Instance::App["rgbank_${name}"],
   }
@@ -98,12 +98,10 @@ define rgbank::web::base(
     }
   }
 
-  apache::listen { $listen_port: }
-
-  if (! defined(Apache::Vhost[$::fqdn])) {
-    apache::vhost { $::fqdn:
-      docroot => $install_dir_real,
-      port    => $listen_port,
+  if (! defined(Nginx::Resource::Vhost["${::fqdn}-${name}])) {
+    nginx::resource::vhost { "${::fqdn}-${name}":
+      listen_port => $listen_port,
+      www_root    => $install_dir_real,
     }
   }
 }
