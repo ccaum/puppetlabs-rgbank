@@ -17,7 +17,7 @@ HOSTS:
       sed -i 's/^#PermitRootLogin/PermitRootLogin/g' /etc/ssh/sshd_config
       service sshd restart
 CONFIG:
-  log_level: debug
+ # log_level: debug
   type: foss
   nfs_server: none
   security_group: ['sg0', 'default']
