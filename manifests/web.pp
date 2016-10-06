@@ -37,7 +37,7 @@ define rgbank::web (
           context  => 'http_port_t',
           port     => $listen_port,
           protocol => 'tcp',
-          before   => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
+          before   => [Rgbank::Web::Base[$name]],
         }
       }
 
@@ -45,7 +45,7 @@ define rgbank::web (
         selinux::boolean { 'httpd_can_network_connect':
           ensure     => true,
           persistent => true,
-          before     => [Apache::Listen[$listen_port],Apache::Vhost[$::fqdn]],
+          before     => [Rgbank::Web::Base[$name]],
         }
       }
     }
