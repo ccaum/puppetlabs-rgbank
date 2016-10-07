@@ -20,8 +20,8 @@ RSpec.configure do |c|
       on host, puppet('module', 'install', 'puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'hunner-wordpress'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'jfryman-selinux'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module', 'install', 'puppet/php'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module', 'install', 'mayflower/nginx'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'mayflower/php'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppet/nginx'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'puppetlabs-app_modeling'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'puppetlabs-firewall'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'puppetlabs-haproxy'), { :acceptable_exit_codes => [0,1] }
