@@ -107,4 +107,11 @@ define rgbank::web::base(
     www_root    => $install_dir_real,
     fastcgi_script  => undef,
   }
+
+  nginx::resource::vhost { "${::fqdn}-${name}":
+    listen_port    => $listen_port,
+    www_root       => $install_dir_real,
+    index_files    => [ 'index.php' ],
+    fastcgi_script => undef,
+  }
 }
