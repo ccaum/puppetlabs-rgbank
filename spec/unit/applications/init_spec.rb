@@ -42,8 +42,8 @@ describe 'rgbank', :type => :application do
 
         context 'with defaults for all parameters' do
           let(:pre_condition){'
-            class { "php": composer => false, }
-            include nginx
+            class { "::php": composer => false, }
+            include ::nginx
             include ::mysql::client
             class {"::mysql::bindings": php_enable => true, }
           '}
