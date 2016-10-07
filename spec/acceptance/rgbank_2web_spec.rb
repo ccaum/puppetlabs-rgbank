@@ -7,8 +7,8 @@ describe 'rgbank web define' do
       it 'should work idempotently with no errors' do
         pp = <<-EOS
         package {'wget': ensure => present, }
-        class { 'apache': default_vhost => false, }
-        class { 'apache::mod::php': }
+        class { 'php': composer => false, }
+        class { 'nginx': }
         class {'::mysql::client': }
         class {'::mysql::bindings': php_enable => true }
         package {'git': ensure => present, }
