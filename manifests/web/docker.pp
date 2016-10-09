@@ -19,7 +19,7 @@ define rgbank::web::docker(
       "DB_USER=${db_user}",
       "DB_HOST=${db_host}",
     ],
-    command => 'nginx',
+    command => 'apache2ctl -D FOREGROUND',
   }
 }
 
