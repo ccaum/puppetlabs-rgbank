@@ -38,7 +38,7 @@ define rgbank::web::base(
     wp_debug             => false,
     wp_debug_log         => false,
     wp_debug_display     => false,
-    notify               => Service['httpd'],
+    notify               => Service['nginx'],
   }
 
   if $source =~ /^https:\/\/github.com/ {
@@ -82,8 +82,8 @@ define rgbank::web::base(
 
   file { "${install_dir_real}/wp-content/uploads":
     ensure  => directory,
-    owner   => apache,
-    group   => apache,
+    owner   => $::nginx::config::global_owner,
+    group   => $::nginx::config::global_group,
     recurse => true,
     require => Wordpress::Instance::App["rgbank_${name}"],
   }
@@ -98,12 +98,20 @@ define rgbank::web::base(
     }
   }
 
-  apache::listen { $listen_port: }
+  nginx::resource::location { "${name}_root":
+    ensure      => present,
+    vhost       => "${::fqdn}-${name}",
+    location    => '~ \.php$',
+    index_files => ['index.php'],
+    fastcgi     => "127.0.0.1:9000",
+    www_root    => $install_dir_real,
+    fastcgi_script  => undef,
+  }
 
-  if (! defined(Apache::Vhost[$::fqdn])) {
-    apache::vhost { $::fqdn:
-      docroot => $install_dir_real,
-      port    => $listen_port,
-    }
+  nginx::resource::vhost { "${::fqdn}-${name}":
+    listen_port    => $listen_port,
+    www_root       => $install_dir_real,
+    index_files    => [ 'index.php' ],
+    fastcgi_script => undef,
   }
 }
