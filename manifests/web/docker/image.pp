@@ -3,7 +3,6 @@ class rgbank::web::docker::image {
   include git
   include mysql::client
   include mysql::bindings::php
-  include nginx
 
   class { 'php': 
     composer => false,
