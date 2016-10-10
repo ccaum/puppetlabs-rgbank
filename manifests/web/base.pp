@@ -65,6 +65,7 @@ define rgbank::web::base(
         Vcsrepo["${install_dir_real}/git/rgbank"],
         Wordpress::Instance::App["rgbank_${name}"],
       ],
+      before  => File["${install_dir_real}/wp-content/uploads"],
     }
 
   } else {
@@ -74,9 +75,9 @@ define rgbank::web::base(
       target     => "${install_dir_real}/wp-content/themes/rgbank",
       checksum   => false,
       src_target => '/tmp',
-      require    => [
-        Wordpress::Instance::App["rgbank_${name}"],
-      ],
+      root_dir   => '.',
+      require    => Wordpress::Instance::App["rgbank_${name}"],
+      before     => File["${install_dir_real}/wp-content/uploads"],
     }
   }
 
@@ -93,8 +94,8 @@ define rgbank::web::base(
       path        => $::path,
       command     => "chcon -R system_u:object_r:usr_t:s0 ${install_dir_real}",
       subscribe   => Wordpress::Instance::App["rgbank_${name}"],
-      refreshonly => true,
       require     => File["${install_dir_real}/wp-content/uploads"],
+      refreshonly => true,
     }
   }
 
