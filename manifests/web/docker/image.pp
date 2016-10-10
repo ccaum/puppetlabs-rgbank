@@ -11,8 +11,8 @@ class rgbank::web::docker::image {
     require => Class['php']
   }
 
-  $source = hiera('rgbank-build-path', 'master')
-  $version = hiera('rgbank-build-version', 'https://github.com/puppetlabs/rgbank')
+  $version = hiera('rgbank-build-path', 'master')
+  $source = hiera('rgbank-build-version', 'https://github.com/puppetlabs/rgbank')
   $install_dir = "/opt/rgbank-web"
   $listen_port = '80'
 
