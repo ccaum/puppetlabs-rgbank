@@ -1,6 +1,16 @@
 class rgbank::web::docker::image {
   include dummy_service
-  include role::appserver
+  include git
+  include mysql::client
+  include mysql::bindings::php
+  include nginx
+
+  class { 'php': 
+    composer => false,
+  }
+  class { 'nginx': 
+    require => Class['php']
+  }
 
   $source = hiera('rgbank-build-path', 'master')
   $version = hiera('rgbank-build-version', 'https://github.com/puppetlabs/rgbank')
