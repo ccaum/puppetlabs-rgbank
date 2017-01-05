@@ -5,12 +5,10 @@ node {
 
   stage('Lint and unit tests') {
     withEnv(['PATH=/usr/local/bin:$PATH']) {
-      ansiColor('xterm') {
-        sh '''
-          bundle install
-          bundle exec rspec spec/
-          '''
-      }
+      sh '''
+        bundle install
+        bundle exec rspec spec/
+      '''
     }
   }
 
