@@ -1,6 +1,6 @@
 node {
 
-  git url: 'git@github.com:puppetlabs/puppetlabs-rgbank.git', credentialsId: 'rgbank-deploy-key'
+  git url: 'git@github.com:puppetlabs/puppetlabs-rgbank.git', credentialsId: 'rgbank-module-deploy-key'
 
   stage('Lint and unit tests') {
     withEnv(['PATH=/usr/local/bin:$PATH']) {
