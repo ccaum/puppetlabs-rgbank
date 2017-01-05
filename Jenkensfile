@@ -7,12 +7,8 @@ node {
       withEnv(['PATH=/usr/local/bin:$PATH']) {
         ansiColor('xterm') {
           sh '''
-          source ~/.bash_profile
-          rbenv global 2.3.1
-          eval "$(rbenv init -)"
-          bundle install
-          bundle exec rake lint
-          bundle exec rake spec
+            bundle install
+            bundle exec rspec spec/
           '''
         }
       }
@@ -30,9 +26,6 @@ node {
         withEnv(['PATH=/usr/local/bin:$PATH']) {
           ansiColor('xterm') {
             sh '''
-              source ~/.bash_profile
-              rbenv global 2.3.1
-              eval "$(rbenv init -)"
               bundle install
               export OS_VOL_SUPPORT=false
               bundle exec rake beaker:centos7-openstack
@@ -43,7 +36,8 @@ node {
     }
 
     stage('Set Tag Data'){
-      sh '''
+      sshagent(['control-repo-github']) {
+        sh '''
         git tag $BUILD_TAG
         git push --tags
       '''
