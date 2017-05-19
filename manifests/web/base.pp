@@ -101,7 +101,7 @@ define rgbank::web::base(
 
   nginx::resource::location { "${name}_root":
     ensure      => present,
-    vhost       => "${::fqdn}-${name}",
+    server      => "${::fqdn}-${name}",
     location    => '~ \.php$',
     index_files => ['index.php'],
     fastcgi     => "127.0.0.1:9000",
