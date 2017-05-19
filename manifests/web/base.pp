@@ -1,6 +1,7 @@
 define rgbank::web::base(
   $version,
   $source,
+  $source_type,
   $listen_port,
   $install_dir,
   $db_name = undef,
@@ -41,43 +42,56 @@ define rgbank::web::base(
     notify               => Service['nginx'],
   }
 
-  if $source =~ /^https:\/\/github.com/ {
+  case $source_type {
+    'vcs': {
 
-    file { "${install_dir_real}/git":
-      ensure => directory,
-      owner  => root,
-      group  => root,
-      mode   => '0755',
+      file { "${install_dir_real}/git":
+        ensure => directory,
+        owner  => root,
+        group  => root,
+        mode   => '0755',
+      }
+
+      vcsrepo { "${install_dir_real}/git/rgbank":
+        ensure   => present,
+        provider => git,
+        source   => $source,
+        revision => $version,
+        require  => File["${install_dir_real}/git"],
+      }
+
+      file { "${install_dir_real}/wp-content/themes/rgbank":
+        ensure  => link,
+        target  => "${install_dir_real}/git/rgbank/src",
+        require => [
+          Vcsrepo["${install_dir_real}/git/rgbank"],
+          Wordpress::Instance::App["rgbank_${name}"],
+        ],
+        before  => File["${install_dir_real}/wp-content/uploads"],
+      }
     }
 
-    vcsrepo { "${install_dir_real}/git/rgbank":
-      ensure   => present,
-      provider => git,
-      source   => $source,
-      revision => $version,
-      require  => File["${install_dir_real}/git"],
+    'artifactory': {
+      archive::artifactory { "rgbank-build-${version}-${name}":
+        ensure       => present,
+        url          => $source,
+        extract      => true,
+        extract_path => "${install_dir_real}/wp-content/themes/rgbank",
+        cleanup      => true,
+      }
     }
 
-    file { "${install_dir_real}/wp-content/themes/rgbank":
-      ensure  => link,
-      target  => "${install_dir_real}/git/rgbank/src",
-      require => [
-        Vcsrepo["${install_dir_real}/git/rgbank"],
-        Wordpress::Instance::App["rgbank_${name}"],
-      ],
-      before  => File["${install_dir_real}/wp-content/uploads"],
-    }
-
-  } else {
-    archive { "rgbank-build-${version}-${name}":
-      ensure     => present,
-      url        => $source,
-      target     => "${install_dir_real}/wp-content/themes/rgbank",
-      checksum   => false,
-      src_target => '/tmp',
-      root_dir   => '.',
-      require    => Wordpress::Instance::App["rgbank_${name}"],
-      before     => File["${install_dir_real}/wp-content/uploads"],
+    'http': {
+      archive { "rgbank-build-${version}-${name}":
+        ensure     => present,
+        url        => $source,
+        target     => "${install_dir_real}/wp-content/themes/rgbank",
+        checksum   => false,
+        src_target => '/tmp',
+        root_dir   => '.',
+        require    => Wordpress::Instance::App["rgbank_${name}"],
+        before     => File["${install_dir_real}/wp-content/uploads"],
+      }
     }
   }
 
