@@ -5,7 +5,7 @@ define rgbank::web (
   $db_password,
   $version = hiera('rgbank-build-version', 'master'),
   $source = hiera('rgbank-build-path', 'http://gitlab.inf.puppet.vm/rgbank/rgbank-web'),
-  $source_type = 'vcs',
+  $source_type = hiera('rgbank-build-source-type', 'vcs'),
   $listen_port = '8060',
   $install_dir = undef,
   $image_tag = 'latest',
