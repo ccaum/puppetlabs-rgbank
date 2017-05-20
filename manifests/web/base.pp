@@ -82,22 +82,6 @@ define rgbank::web::base(
         require      => File["${install_dir_real}/artifactory/rgbank-${version}"],
       }
 
-      #artifactory::fetch_artifact { "rgbank-build":
-      #  version      => $version,
-      #  project      => "rgbank-web",
-      #  format       => 'tar.gz',
-      #  install_path => "${install_dir_real}/artifactory/rgbank-${version}",
-      #  server       => "http://${artifactory_server}",
-      #  filename     => "rgbank-build-${version}.tar.gz",
-      #  notify       => Exec['unpack rgbank build'],
-      #  require      => File["${install_dir_real}/artifactory/rgbank-${version}"],
-      #}
-
-      #exec { 'unpack rgbank build':
-      #  command     => "/bin/tar -C ${install_dir_real}/artifactory/rgbank -xzf rgbank-build-${version}.tar.gz",
-      #  refreshonly => true,
-      #}
-
       file { "${install_dir_real}/artifactory":
         ensure => directory,
         owner  => root,
