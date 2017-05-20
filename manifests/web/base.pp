@@ -9,7 +9,7 @@ define rgbank::web::base(
   $db_password = undef,
   $db_host = undef,
   $custom_wp_config = undef,
-  $artifactory_server = puppetdb_query('inventory[certname] { trusted.extensions.pp_role = "artifactory" }')[0]['certname'],
+  $artifactory_server = puppetdb_query('inventory[facts] { trusted.extensions.pp_role = "artifactory" }')[0]['facts']['fqdn'],
 ) {
 
   if $install_dir {
@@ -73,20 +73,13 @@ define rgbank::web::base(
     }
 
     'artifactory': {
-      artifactory::fetch_artifact { "rgbank-build":
-        version      => $version,
-        project      => "rgbank-web",
-        format       => 'tar.gz',
-        install_path => "${install_dir_real}/artifactory/rgbank-${version}",
-        server       => "http://${artifactory_server}",
-        filename     => "rgbank-build-${version}.tar.gz",
-        notify       => Exec['unpack rgbank build'],
+      archive::artifactory { "rgbank-build-${version}.tar.gz":
+        ensure       => present,
+        extract      => true,
+        extract_path => "${install_dir_real}/artifactory/rgbank-${version}",
+        url          => "http://${artifactory_server}/artifactory/rgbank-web/rgbank-build-${version}.tar.gz",
+        archive_path => "${install_dir_real}/artifactory/rgbank-${version}",
         require      => File["${install_dir_real}/artifactory/rgbank-${version}"],
-      }
-
-      exec { 'unpack rgbank build':
-        command     => "/bin/tar -C ${install_dir_real}/artifactory/rgbank -xzf rgbank-build-${version}.tar.gz",
-        refreshonly => true,
       }
 
       file { "${install_dir_real}/artifactory":
@@ -94,7 +87,8 @@ define rgbank::web::base(
         owner  => root,
         group  => root,
         mode   => '0755',
-        purge  =>  true,
+        purge  => true,
+        force  => true,
       }
 
       file { "${install_dir_real}/artifactory/rgbank-${version}":
@@ -108,7 +102,7 @@ define rgbank::web::base(
         ensure  => link,
         target  => "${install_dir_real}/artifactory/rgbank-${version}",
         require => [
-          Exec['unpack rgbank build'],
+          Archive::Artifactory["rgbank-build-${version}.tar.gz"],
           Wordpress::Instance::App["rgbank_${name}"],
         ],
         before  => File["${install_dir_real}/wp-content/uploads"],
