@@ -81,7 +81,7 @@ define rgbank::web::base(
         server       => "http://${artifactory_server}",
         filename     => "rgbank-build-${version}.tar.gz",
         notify       => Exec['unpack rgbank build'],
-        require      => File["${install_dir_real}/artifactory/rgbank"],
+        require      => File["${install_dir_real}/artifactory/rgbank-${version}"],
       }
 
       exec { 'unpack rgbank build':
@@ -94,9 +94,10 @@ define rgbank::web::base(
         owner  => root,
         group  => root,
         mode   => '0755',
+        purge  =>  true,
       }
 
-      file { "${install_dir_real}/artifactory/rgbank":
+      file { "${install_dir_real}/artifactory/rgbank-${version}":
         ensure => directory,
         owner  => root,
         group  => root,
