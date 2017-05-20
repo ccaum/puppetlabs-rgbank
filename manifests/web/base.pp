@@ -72,7 +72,7 @@ define rgbank::web::base(
     }
 
     'artifactory': {
-      archive::artifactory { "rgbank-build-${version}-${name}":
+      archive::artifactory { "rgbank-build-${version}-${name}.tar.gz":
         ensure       => present,
         url          => $source,
         extract      => true,
