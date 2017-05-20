@@ -77,7 +77,7 @@ define rgbank::web::base(
         version      => $version,
         project      => "rgbank-web",
         format       => 'tar.gz',
-        install_path => "${install_dir_real}/artifactory/rgbank",
+        install_path => "${install_dir_real}/artifactory/rgbank-${version}",
         server       => "http://${artifactory_server}",
         filename     => "rgbank-build-${version}.tar.gz",
         notify       => Exec['unpack rgbank build'],
@@ -106,7 +106,7 @@ define rgbank::web::base(
 
       file { "${install_dir_real}/wp-content/themes/rgbank":
         ensure  => link,
-        target  => "${install_dir_real}/artifactory/rgbank",
+        target  => "${install_dir_real}/artifactory/rgbank-${version}",
         require => [
           Exec['unpack rgbank build'],
           Wordpress::Instance::App["rgbank_${name}"],
