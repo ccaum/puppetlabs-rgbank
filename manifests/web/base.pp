@@ -75,6 +75,7 @@ define rgbank::web::base(
     'artifactory': {
       archive::artifactory { "rgbank-build-${version}.tar.gz":
         ensure       => present,
+        extract      => true,
         url          => "http://${artifactory_server}/artifactory/rgbank-web/rgbank-build-${version}.tar.gz",
         archive_path => "${install_dir_real}/artifactory/rgbank-${version}",
         require      => File["${install_dir_real}/artifactory/rgbank-${version}"],
