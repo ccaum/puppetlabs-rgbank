@@ -6,6 +6,7 @@ define rgbank::web (
   $version = hiera('rgbank-build-version', 'master'),
   $source = hiera('rgbank-build-path', 'http://gitlab.inf.puppet.vm/rgbank/rgbank-web'),
   $source_type = hiera('rgbank-build-source-type', 'vcs'),
+  $artifactory_server = hiera('rgbank::artifactory_server'),
   $listen_port = '8060',
   $install_dir = undef,
   $image_tag = 'latest',
@@ -22,15 +23,16 @@ define rgbank::web (
     }
   } else {
     rgbank::web::base { $name:
-      db_name     => $db_name,
-      db_user     => $db_user,
-      db_password => $db_password,
-      db_host     => $db_host,
-      version     => $version,
-      source      => $source,
-      source_type => $source_type,
-      listen_port => $listen_port,
-      install_dir => $install_dir,
+      db_name            => $db_name,
+      db_user            => $db_user,
+      db_password        => $db_password,
+      db_host            => $db_host,
+      version            => $version,
+      source             => $source,
+      source_type        => $source_type,
+      listen_port        => $listen_port,
+      install_dir        => $install_dir,
+      artifactory_server => $artifactory_server,
     }
 
     if $::selinux == true {

@@ -9,6 +9,7 @@ define rgbank::web::base(
   $db_password = undef,
   $db_host = undef,
   $custom_wp_config = undef,
+  $artifactory_server = puppetdb_query('inventory[certname] { trusted.extensions.pp_role = "artifactory" }')[0]['certname'],
 ) {
 
   if $install_dir {
@@ -72,12 +73,18 @@ define rgbank::web::base(
     }
 
     'artifactory': {
-      archive::artifactory { "rgbank-build-${version}-${name}.tar.gz":
-        ensure       => present,
-        url          => $source,
-        extract      => true,
-        extract_path => "${install_dir_real}/wp-content/themes/rgbank",
-        cleanup      => true,
+      artifactory::fetch_artifact { "rgbank-build":
+        version      => $version,
+        project      => "rgbank-web",
+        format       => 'tar.gz',
+        install_path => "${install_dir_real}/wp-content/themes/",
+        server       => "http://${artifactory_server}",
+        notify       => Exec['unpack rgbank build'],
+      }
+
+      exec { 'unpack rgbank build':
+        command     => "/bin/tar -C ${install_dir_real}/wp-content/themes/ -xzf rgbank-build-${version}.tar.gz",
+        refreshonly => true,
       }
     }
 
