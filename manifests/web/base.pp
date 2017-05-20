@@ -116,7 +116,7 @@ define rgbank::web::base(
         ensure  => link,
         target  => "${install_dir_real}/artifactory/rgbank-${version}",
         require => [
-          Exec['unpack rgbank build'],
+          Archive::Artifactory["rgbank-build-${version}.tar.gz"],
           Wordpress::Instance::App["rgbank_${name}"],
         ],
         before  => File["${install_dir_real}/wp-content/uploads"],
