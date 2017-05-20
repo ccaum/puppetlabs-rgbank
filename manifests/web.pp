@@ -10,6 +10,7 @@ define rgbank::web (
   $listen_port = '8060',
   $install_dir = undef,
   $image_tag = 'latest',
+  $enable_header = hiera('rgbank::web::enable_header', false),
   $use_docker = false,
 ) {
   if $use_docker {
@@ -32,6 +33,7 @@ define rgbank::web (
       source_type        => $source_type,
       listen_port        => $listen_port,
       install_dir        => $install_dir,
+      enable_header      => $enable_header,
       artifactory_server => $artifactory_server,
     }
 

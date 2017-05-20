@@ -1,0 +1,31 @@
+<%- | Boolean $enable_header,
+      String $version,
+      String $environment,
+      String $build_source_type,
+      String $build_source,
+      String $artifactory_server
+| -%>
+
+<%- if $version { %>
+$version = <%= $version %>
+<%- } %>
+
+<%- if $environment { %>
+$environment = <%= $environment %>
+<%- } %>
+
+<%- if $build_source_type { %>
+$build_source_type = <%= $build_source_type %>
+<%- } %>
+
+<%- if $build_source { %>
+$build_source = <%= $build_source %>
+<%- } %>
+
+<%- if $artifactory_server { %>
+$artifactory_server = <%= $artifactory_server %>
+<%- } %>
+
+<%- if $enable_header { %>
+$enable_header = <%= $enable_header %>
+<%- } %>

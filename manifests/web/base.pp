@@ -9,6 +9,7 @@ define rgbank::web::base(
   $db_password = undef,
   $db_host = undef,
   $custom_wp_config = undef,
+  $enable_header = false,
   $artifactory_server = puppetdb_query('inventory[facts] { trusted.extensions.pp_role = "artifactory" }')[0]['facts']['fqdn'],
 ) {
 
@@ -157,5 +158,20 @@ define rgbank::web::base(
     www_root       => $install_dir_real,
     index_files    => [ 'index.php' ],
     fastcgi_script => undef,
+  }
+
+  file { "${install_dir_real}/variables.php":
+    ensure  => file,
+    content => epp('rgbank/variables.epp', {
+      'version'            => $version,
+      'environment'        => $::trusted['extensions']['pp_environment'],
+      'build_source_type'  => $source_type,
+      'build_source'       => $source,
+      'artifactory_server' => $artifactory_server,
+      'enable_header'      => $enable_header,
+    }),
+    owner   => $::nginx::config::global_owner,
+    owner   => $::nginx::config::global_group,
+    mode    => 0640,
   }
 }
