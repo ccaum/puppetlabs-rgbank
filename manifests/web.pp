@@ -66,7 +66,7 @@ Rgbank::Web produces Http {
   name => $name,
   ip   => $::ipaddress,
   port => $listen_port,
-  host => $::fqdn,
+  host => $::trusted['certname'],
   path => '/',
 }
 
