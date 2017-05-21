@@ -26,6 +26,4 @@ $build_source = <%= $build_source %>
 $artifactory_server = <%= $artifactory_server %>
 <%- } %>
 
-<%- if $enable_header { %>
 $enable_header = <%= $enable_header %>
-<%- } %>
