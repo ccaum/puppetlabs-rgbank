@@ -160,7 +160,8 @@ define rgbank::web::base(
     fastcgi_script => undef,
   }
 
-  file { "${install_dir_real}/variables.php":
+  file { "rgbank-variables.php":
+    path    => "${install_dir_real}/variables.php",
     ensure  => file,
     content => epp('rgbank/variables.epp', {
       'version'            => $version,
