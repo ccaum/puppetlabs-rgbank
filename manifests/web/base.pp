@@ -47,14 +47,16 @@ define rgbank::web::base(
   case $source_type {
     'vcs': {
 
-      file { "${install_dir_real}/git":
+      file { "rgbank/git":
+        path   => "${install_dir_real}/git",
         ensure => directory,
         owner  => root,
         group  => root,
         mode   => '0755',
       }
 
-      vcsrepo { "${install_dir_real}/git/rgbank":
+      vcsrepo { "rgbank/git/rgbank":
+        path     => "${install_dir_real}/git/rgbank",
         ensure   => present,
         provider => git,
         source   => $source,
@@ -62,7 +64,8 @@ define rgbank::web::base(
         require  => File["${install_dir_real}/git"],
       }
 
-      file { "${install_dir_real}/wp-content/themes/rgbank":
+      file { "rgbank/wp-content/themes/rgbank":
+        path    => "${install_dir_real}/wp-content/themes/rgbank",
         ensure  => link,
         target  => "${install_dir_real}/git/rgbank/src",
         require => [
@@ -83,7 +86,8 @@ define rgbank::web::base(
         require      => File["${install_dir_real}/artifactory/rgbank-${version}"],
       }
 
-      file { "${install_dir_real}/artifactory":
+      file { "rgbank/artifactory":
+        path   => "${install_dir_real}/artifactory",
         ensure => directory,
         owner  => root,
         group  => root,
@@ -92,14 +96,16 @@ define rgbank::web::base(
         force  => true,
       }
 
-      file { "${install_dir_real}/artifactory/rgbank-${version}":
+      file { "rgbank/artifactory/rgbank-${version}":
+        path   => "${install_dir_real}/artifactory/rgbank-${version}",
         ensure => directory,
         owner  => root,
         group  => root,
         mode   => '0755',
       }
 
-      file { "${install_dir_real}/wp-content/themes/rgbank":
+      file { "rgbank/wp-content/themes/rgbank": 
+        path    => "${install_dir_real}/wp-content/themes/rgbank", 
         ensure  => link,
         target  => "${install_dir_real}/artifactory/rgbank-${version}",
         require => [
@@ -126,6 +132,7 @@ define rgbank::web::base(
   }
 
   file { "${install_dir_real}/wp-content/uploads":
+    path    => "${install_dir_real}/wp-content/uploads",
     ensure  => directory,
     owner   => $::nginx::config::global_owner,
     group   => $::nginx::config::global_group,
@@ -160,7 +167,7 @@ define rgbank::web::base(
     fastcgi_script => undef,
   }
 
-  file { "rgbank-variables.php":
+  file { "rgbank/variables.php":
     path    => "${install_dir_real}/variables.php",
     ensure  => file,
     content => epp('rgbank/variables.epp', {
