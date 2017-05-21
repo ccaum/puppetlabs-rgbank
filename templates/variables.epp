@@ -5,7 +5,7 @@
       String $build_source,
       String $artifactory_server
 | -%>
-
+<?php
 <%- if $version { %>
 $version = "<%= $version %>";
 <%- } %>
@@ -27,3 +27,4 @@ $artifactory_server = "<%= $artifactory_server %>";
 <%- } %>
 
 $enable_header = <%= $enable_header %>;
+?>
