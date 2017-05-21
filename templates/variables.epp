@@ -7,23 +7,23 @@
 | -%>
 
 <%- if $version { %>
-$version = <%= $version %>
+$version = "<%= $version %>";
 <%- } %>
 
 <%- if $environment { %>
-$environment = <%= $environment %>
+$environment = "<%= $environment %>";
 <%- } %>
 
 <%- if $build_source_type { %>
-$build_source_type = <%= $build_source_type %>
+$build_source_type = "<%= $build_source_type %>";
 <%- } %>
 
 <%- if $build_source { %>
-$build_source = <%= $build_source %>
+$build_source = "<%= $build_source %>";
 <%- } %>
 
 <%- if $artifactory_server { %>
-$artifactory_server = <%= $artifactory_server %>
+$artifactory_server = "<%= $artifactory_server %>";
 <%- } %>
 
-$enable_header = <%= $enable_header %>
+$enable_header = <%= $enable_header %>;

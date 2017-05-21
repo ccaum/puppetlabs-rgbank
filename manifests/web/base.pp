@@ -173,6 +173,6 @@ define rgbank::web::base(
     }),
     owner   => $::nginx::config::global_owner,
     group   => $::nginx::config::global_group,
-    mode    => '0640',
+    mode    => '0644',
   }
 }
