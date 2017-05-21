@@ -171,7 +171,7 @@ define rgbank::web::base(
       'enable_header'      => $enable_header,
     }),
     owner   => $::nginx::config::global_owner,
-    owner   => $::nginx::config::global_group,
+    group   => $::nginx::config::global_group,
     mode    => 0640,
   }
 }
