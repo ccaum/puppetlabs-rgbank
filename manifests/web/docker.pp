@@ -8,10 +8,10 @@ define rgbank::web::docker(
 ) {
   include docker
 
-  docker::image {'ccaum/rgbank-web': }
+  docker::image {'kenazk/rgbank': }
 
   docker::run { 'rgbank-web':
-    image   => 'ccaum/rgbank-web',
+    image   => 'kenazk/rgbank',
     ports   => ["${listen_port}:80"],
     env     => [
       "DB_NAME=${db_name}",
