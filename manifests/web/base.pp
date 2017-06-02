@@ -172,7 +172,7 @@ define rgbank::web::base(
     ensure  => file,
     content => epp('rgbank/variables.epp', {
       'version'            => $version,
-      'environment'        => $::trusted['extensions']['pp_environment'],
+      'environment'        => pick($::trusted['extensions']['pp_environment'], $::environment),
       'build_source_type'  => $source_type,
       'build_source'       => $source,
       'artifactory_server' => $artifactory_server,
