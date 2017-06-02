@@ -18,7 +18,7 @@ class rgbank::web::docker::image {
   $source_type = hiera('rgbank-build-source-type', 'vcs')
   $artifactory_server = hiera('rgbank::artifactory_server', '')
   $install_dir = "/opt/rgbank-web"
-  $listen_port = '80'
+  $listen_port = '8060'
 
   rgbank::web::base { 'docker-image':
     version            => $version,
