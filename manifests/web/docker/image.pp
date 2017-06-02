@@ -12,13 +12,15 @@ class rgbank::web::docker::image {
   }
 
   $version = hiera('rgbank-build-path', 'master')
-  $source = hiera('rgbank-build-version', 'https://github.com/puppetlabs/rgbank')
+  $source = hiera('rgbank-build-version', 'https://gitlab.inf.puppet.vm/puppetlabs/rgbank')
+  $source_type = hiera('rgbank-build-source-type', 'vcs')
   $install_dir = "/opt/rgbank-web"
   $listen_port = '80'
 
   rgbank::web::base { 'docker-image':
     version          => $version,
     source           => $source,
+    source_type      => $source_type,
     listen_port      => $listen_port,
     install_dir      => $install_dir,
     custom_wp_config => file('rgbank/wp-config.php.docker'),
