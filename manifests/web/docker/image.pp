@@ -19,11 +19,12 @@ class rgbank::web::docker::image {
   $listen_port = '80'
 
   rgbank::web::base { 'docker-image':
-    version          => $version,
-    source           => $source,
-    source_type      => $source_type,
-    listen_port      => $listen_port,
-    install_dir      => $install_dir,
-    custom_wp_config => file('rgbank/wp-config.php.docker'),
+    version            => $version,
+    source             => $source,
+    source_type        => $source_type,
+    listen_port        => $listen_port,
+    install_dir        => $install_dir,
+    artifactory_server => $artifactory_server,
+    custom_wp_config   => file('rgbank/wp-config.php.docker'),
   }
 }
