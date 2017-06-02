@@ -10,7 +10,7 @@ define rgbank::web::base(
   $db_host = undef,
   $custom_wp_config = undef,
   $enable_header = false,
-  $artifactory_server = puppetdb_query('inventory[facts] { trusted.extensions.pp_role = "artifactory" }')[0]['facts']['fqdn'],
+  $artifactory_server = undef,
 ) {
 
   if $install_dir {
