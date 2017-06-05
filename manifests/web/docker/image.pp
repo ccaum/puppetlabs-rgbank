@@ -15,7 +15,7 @@ class rgbank::web::docker::image {
 
   file { '/entrypoint':
     mode   => '0755',
-    source => 'puppet:///rgbank/entrypoint',
+    source => 'puppet:///modules/rgbank/entrypoint',
   }
 
   $version = hiera('rgbank-build-path', 'master')
