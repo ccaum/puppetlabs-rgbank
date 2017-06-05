@@ -6,17 +6,17 @@ class rgbank::web::docker::image {
 
   class { 'php': 
     composer                 => false,
-    fpm_global_pool_settings => {
-      'www' => {
-        'listen' => '/var/run/php-fpm.sock',
-      }
-    }
   }
   class { 'nginx': 
     require => Class['php']
   }
 
   package { 'wget': ensure =>  installed }
+
+  file { '/entrypoint':
+    mode   => '0755',
+    source => 'puppet:///rgbank/entrypoint',
+  }
 
   $version = hiera('rgbank-build-path', 'master')
   $source = hiera('rgbank-build-version', 'http://gitlab.inf.puppet.vm/rgbank/rgbank-web.git')
