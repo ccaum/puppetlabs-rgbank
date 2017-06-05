@@ -5,7 +5,12 @@ class rgbank::web::docker::image {
   include mysql::bindings::php
 
   class { 'php': 
-    composer => false,
+    composer                 => false,
+    fpm_global_pool_settings => {
+      'www' => {
+        'listen' => '/var/run/php-fpm.sock',
+      }
+    }
   }
   class { 'nginx': 
     require => Class['php']
