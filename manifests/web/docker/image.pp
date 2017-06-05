@@ -6,6 +6,7 @@ class rgbank::web::docker::image {
 
   class { 'php': 
     composer => false,
+    fpm      => false,
   }
   class { 'nginx': 
     require => Class['php']
