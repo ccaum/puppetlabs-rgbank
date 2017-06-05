@@ -1,8 +1,8 @@
 #!/bin/bash
 
 for i in `env | grep ^DB`; do
-  $k=`echo $i | cut -d= -f1`
-  $v=`echo $i | cut -d= -f2`
+  k=`echo $i | cut -d= -f1`
+  v=`echo $i | cut -d= -f2`
   echo "env[$k] = $v;" >> /etc/php-fpm.d/www.conf
 done
 
