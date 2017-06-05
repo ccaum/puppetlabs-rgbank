@@ -5,7 +5,10 @@ class rgbank::web::docker::image {
   include mysql::bindings::php
 
   class { 'php': 
-    composer                 => false,
+    composer => false,
+    settings => {
+      'PHP/variables_order' => 'EGPCS',
+    },
   }
   class { 'nginx': 
     require => Class['php']
