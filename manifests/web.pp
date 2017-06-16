@@ -14,6 +14,10 @@ define rgbank::web (
   $use_docker = false,
 ) {
   if $use_docker {
+    rgbank::web::base { $name:
+      ensure => absent,
+    }
+
     rgbank::web::docker { $name:
       db_name     => $db_name,
       db_user     => $db_user,
