@@ -177,22 +177,27 @@ define rgbank::web::base(
     fastcgi_script => undef,
   }
 
-  file { "rgbank/variables.php":
-    path    => "${install_dir_real}/variables.php",
-    ensure  => $ensure ? {
-      'present' => 'file',
-      'absent'  => 'absent',
-    },
-    content => epp('rgbank/variables.epp', {
-      'version'            => $version,
-      'environment'        => pick($::trusted['extensions']['pp_environment'], $::environment),
-      'build_source_type'  => $source_type,
-      'build_source'       => $source,
-      'artifactory_server' => $artifactory_server,
-      'enable_header'      => $enable_header,
-    }),
-    owner   => $::nginx::config::global_owner,
-    group   => $::nginx::config::global_group,
-    mode    => '0644',
+  if $ensure == 'absent' {
+    file { "rgbank/variables.php":
+      path   => "${install_dir_real}/variables.php",
+      ensure =>  absent,
+    }
+  } else {
+
+    file { "rgbank/variables.php":
+      path    => "${install_dir_real}/variables.php",
+      ensure  => present,
+      content => epp('rgbank/variables.epp', {
+        'version'            => $version,
+        'environment'        => pick($::trusted['extensions']['pp_environment'], $::environment),
+        'build_source_type'  => $source_type,
+        'build_source'       => $source,
+        'artifactory_server' => $artifactory_server,
+        'enable_header'      => $enable_header,
+      }),
+      owner   => $::nginx::config::global_owner,
+      group   => $::nginx::config::global_group,
+      mode    => '0644',
+    }
   }
 }
