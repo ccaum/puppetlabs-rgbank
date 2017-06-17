@@ -22,7 +22,7 @@ class rgbank::web::docker::image {
   }
 
   $version = hiera('rgbank-build-path', 'master')
-  $source = hiera('rgbank-build-version', 'http://gitlab.inf.puppet.vm/rgbank/rgbank-web.git')
+  $source = hiera('rgbank-build-version', 'http://github.com/rgbank/rgbank-web.git')
   $source_type = hiera('rgbank-build-source-type', 'vcs')
   $artifactory_server = hiera('rgbank::artifactory_server', '')
   $install_dir = "/opt/rgbank-web"
