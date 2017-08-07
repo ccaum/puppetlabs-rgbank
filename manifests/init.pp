@@ -18,7 +18,7 @@ application rgbank (
     }
   }
 
-  if ($web_components.length() > 0) {
+  if ($web_components.size() > 0) {
     $web_https = $web_components.map |$comp_name| {
       $http = Http["rgbank-web-${comp_name}"]
 
