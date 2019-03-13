@@ -22,8 +22,7 @@ group :development, :unit_tests do
   gem 'puppetlabs_spec_helper', '>= 1.2.1'
   gem 'simplecov'
   gem 'simplecov-console'
-  gem 'rspec-puppet', '>= 2.4.0', :git => 'https://github.com/rodjek/rspec-puppet.git',
-                                  :ref => 'd1a7233eec08a2c605b623ced2b863c5ea4b37df'
+  gem 'rspec-puppet'
   gem 'rspec-puppet-facts'
   gem 'parallel_tests'
   gem 'rubocop', '0.41.2' if RUBY_VERSION < '2.0.0'
