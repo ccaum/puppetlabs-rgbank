@@ -10,6 +10,8 @@ application rgbank (
   $web_components = collect_component_titles($nodes, Rgbank::Web)
   $load_component = collect_component_titles($nodes, Rgbank::Load)[0] #Assume we only have one
 
+  notify { "hello benny": }
+
   if $db_component {
     rgbank::db { $db_component:
       user     => $db_username,
