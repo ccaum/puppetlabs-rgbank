@@ -7,7 +7,7 @@ define rgbank::infrastructure::web(
   $development_branch,
   $build_number,
 ) {
-  
+
   $vmware_template       = hiera('rgbank::infrastructure::web::vmware_template', '/opdx1/vm/carl/centos-7-x86_64-puppet')
   $vmware_resource_pool  = hiera('rgbank::infrastructure::web::vmware_resource_pool', '/general1')
   $aws_region            = hiera('rgbank::infrastructure::web::aws_region', 'us-east-1')
@@ -26,11 +26,11 @@ define rgbank::infrastructure::web(
     security_groups   => $aws_security_groups,
     tags              => {
       development_branch => $development_branch,
-      development_app    => "RG Bank",
-      provisioner        => "puppet",
-      department         => "Product Marketing",
-      project            => "ARA demo",
-      owner              => "Carl Caum",
+      development_app    => 'RG Bank',
+      provisioner        => 'puppet',
+      department         => 'Product Marketing',
+      project            => 'ARA demo',
+      owner              => 'Carl Caum',
     },
   }
 
@@ -76,11 +76,11 @@ define rgbank::infrastructure::web(
         instance_type   => $aws_instance_type,
         security_groups => $aws_security_groups,
         user_data       => epp( 'rgbank/aws_user_data.epp', {
-          'role'           => 'rgbank-development',
-          'application'    => "Rgbank[${::branch}]",
-          'environment'    => $development_branch,
-          'apptier'        => '[Rgbank::Db,Rgbank::Web]',
-          'build_id'       => $build_number
+          'role'        => 'rgbank-development',
+          'application' => "Rgbank[${::branch}]",
+          'environment' => $development_branch,
+          'apptier'     => '[Rgbank::Db,Rgbank::Web]',
+          'build_id'    => $build_number
         }),
       }
     }

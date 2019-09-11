@@ -4,13 +4,13 @@ class rgbank::web::docker::image {
   include mysql::client
   include mysql::bindings::php
 
-  class { 'php': 
+  class { 'php':
     composer => false,
     settings => {
       'PHP/variables_order' => 'EGPCS',
     },
   }
-  class { 'nginx': 
+  class { 'nginx':
     require => Class['php']
   }
 
@@ -25,7 +25,7 @@ class rgbank::web::docker::image {
   $source = hiera('rgbank-build-version', 'http://github.com/rgbank/rgbank-web.git')
   $source_type = hiera('rgbank-build-source-type', 'vcs')
   $artifactory_server = hiera('rgbank::artifactory_server', '')
-  $install_dir = "/opt/rgbank-web"
+  $install_dir = '/opt/rgbank-web'
   $listen_port = '8060'
 
   rgbank::web::base { 'docker-image':

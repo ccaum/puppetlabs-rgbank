@@ -55,26 +55,26 @@ define rgbank::web::base(
     case $source_type {
       'vcs': {
 
-        file { "rgbank/git":
-          path   => "${install_dir_real}/git",
+        file { 'rgbank/git':
           ensure => directory,
+          path   => "${install_dir_real}/git",
           owner  => root,
           group  => root,
           mode   => '0755',
         }
 
-        vcsrepo { "rgbank/git/rgbank":
-          path     => "${install_dir_real}/git/rgbank",
+        vcsrepo { 'rgbank/git/rgbank':
           ensure   => present,
+          path     => "${install_dir_real}/git/rgbank",
           provider => git,
           source   => $source,
           revision => $version,
           require  => File["${install_dir_real}/git"],
         }
 
-        file { "rgbank/wp-content/themes/rgbank":
-          path    => "${install_dir_real}/wp-content/themes/rgbank",
+        file { 'rgbank/wp-content/themes/rgbank':
           ensure  => link,
+          path    => "${install_dir_real}/wp-content/themes/rgbank",
           target  => "${install_dir_real}/git/rgbank/src",
           require => [
             Vcsrepo["${install_dir_real}/git/rgbank"],
@@ -94,9 +94,9 @@ define rgbank::web::base(
           require      => File["${install_dir_real}/artifactory/rgbank-${version}"],
         }
 
-        file { "rgbank/artifactory":
-          path   => "${install_dir_real}/artifactory",
+        file { 'rgbank/artifactory':
           ensure => directory,
+          path   => "${install_dir_real}/artifactory",
           owner  => root,
           group  => root,
           mode   => '0755',
@@ -105,16 +105,16 @@ define rgbank::web::base(
         }
 
         file { "rgbank/artifactory/rgbank-${version}":
-          path   => "${install_dir_real}/artifactory/rgbank-${version}",
           ensure => directory,
+          path   => "${install_dir_real}/artifactory/rgbank-${version}",
           owner  => root,
           group  => root,
           mode   => '0755',
         }
 
-        file { "rgbank/wp-content/themes/rgbank": 
-          path    => "${install_dir_real}/wp-content/themes/rgbank", 
+        file { 'rgbank/wp-content/themes/rgbank':
           ensure  => link,
+          path    => "${install_dir_real}/wp-content/themes/rgbank",
           target  => "${install_dir_real}/artifactory/rgbank-${version}",
           require => [
             Archive::Artifactory["rgbank-build-${version}.tar.gz"],
@@ -140,8 +140,8 @@ define rgbank::web::base(
     }
 
     file { "${install_dir_real}/wp-content/uploads":
-      path    => "${install_dir_real}/wp-content/uploads",
       ensure  => directory,
+      path    => "${install_dir_real}/wp-content/uploads",
       owner   => $::nginx::config::global_owner,
       group   => $::nginx::config::global_group,
       recurse => true,
@@ -160,13 +160,13 @@ define rgbank::web::base(
   }
 
   nginx::resource::location { "${name}_root":
-    ensure      => $ensure,
-    server      => "${::fqdn}-${name}",
-    location    => '~ \.php$',
-    index_files => ['index.php'],
-    fastcgi     => "127.0.0.1:9000",
-    www_root    => $install_dir_real,
-    fastcgi_script  => undef,
+    ensure         => $ensure,
+    server         => "${::fqdn}-${name}",
+    location       => '~ \.php$',
+    index_files    => ['index.php'],
+    fastcgi        => '127.0.0.1:9000',
+    www_root       => $install_dir_real,
+    fastcgi_script => undef,
   }
 
   nginx::resource::server { "${::fqdn}-${name}":
@@ -178,15 +178,15 @@ define rgbank::web::base(
   }
 
   if $ensure == 'absent' {
-    file { "rgbank/variables.php":
-      path   => "${install_dir_real}/variables.php",
+    file { 'rgbank/variables.php':
       ensure =>  absent,
+      path   => "${install_dir_real}/variables.php",
     }
   } else {
 
-    file { "rgbank/variables.php":
-      path    => "${install_dir_real}/variables.php",
+    file { 'rgbank/variables.php':
       ensure  => present,
+      path    => "${install_dir_real}/variables.php",
       content => epp('rgbank/variables.epp', {
         'version'            => $version,
         'environment'        => pick($::trusted['extensions']['pp_environment'], $::environment),
