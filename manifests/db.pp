@@ -30,13 +30,13 @@ class rgbank::db (
   }
 }
 
-Rgbank::Db produces Database {
-  database => "rgbank-${name}",
-  user     => $user,
-  host     => $ec2_metadata ? {
-    undef   => $::networking['interfaces'][$::networking['interfaces'].keys[0]]['ip'],
-    default => $ec2_metadata['public-ipv4'],
-  },
-  password => $password,
-  port     => $port,
-}
+#Rgbank::Db produces Database {
+#  database => "rgbank-${name}",
+#  user     => $user,
+#  host     => $ec2_metadata ? {
+#    undef   => $::networking['interfaces'][$::networking['interfaces'].keys[0]]['ip'],
+#    default => $ec2_metadata['public-ipv4'],
+#  },
+#  password => $password,
+#  port     => $port,
+#}
