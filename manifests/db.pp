@@ -1,4 +1,4 @@
-define rgbank::db (
+class rgbank::db (
   $user,
   $password,
   $port = '3306',

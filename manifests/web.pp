@@ -1,16 +1,16 @@
-define rgbank::web (
+class rgbank::web (
   $db_name,
   $db_host,
   $db_user,
   $db_password,
-  $version = hiera('rgbank-build-version', 'master'),
-  $source = hiera('rgbank-build-path', 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank')
-  $source_type = hiera('rgbank-build-source-type', 'vcs'),
-  $artifactory_server = hiera('rgbank::artifactory_server', puppetdb_query('inventory[facts] { trusted.extensions.pp_role = "artifactory" }')[0]['facts']['fqdn'], undef),
+  $version = lookup('rgbank-build-version', 'master'),
+  $source = lookup('rgbank-build-path', 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank'),
+  $source_type = lookup('rgbank-build-source-type', 'vcs'),
+  $artifactory_server = lookup('rgbank::artifactory_server', puppetdb_query('inventory[facts] { trusted.extensions.pp_role = "artifactory" }')[0]['facts']['fqdn'], undef),
   $listen_port = '8060',
   $install_dir = undef,
   $image_tag = 'latest',
-  $enable_header = hiera('rgbank::web::enable_header', false),
+  $enable_header = lookup('rgbank::web::enable_header', false),
   $use_docker = false,
 ) {
   if $use_docker {
