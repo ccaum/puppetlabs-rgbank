@@ -1,4 +1,5 @@
 class rgbank::web (
+  $site_name,
   $db_name,
   $db_host,
   $db_user,
@@ -14,11 +15,11 @@ class rgbank::web (
   $use_docker = false,
 ) {
   if $use_docker {
-    rgbank::web::base { $name:
+    rgbank::web::base { $site_name:
       ensure => absent,
     }
 
-    rgbank::web::docker { $name:
+    rgbank::web::docker { $site_name:
       db_name     => $db_name,
       db_user     => $db_user,
       db_password => $db_password,
@@ -27,7 +28,7 @@ class rgbank::web (
       listen_port => $listen_port,
     }
   } else {
-    rgbank::web::base { $name:
+    rgbank::web::base { $site_name:
       db_name            => $db_name,
       db_user            => $db_user,
       db_password        => $db_password,
@@ -47,7 +48,7 @@ class rgbank::web (
           context  => 'http_port_t',
           port     => $listen_port,
           protocol => 'tcp',
-          before   => [Rgbank::Web::Base[$name]],
+          before   => [Rgbank::Web::Base[$site_name]],
         }
       }
 
@@ -55,13 +56,13 @@ class rgbank::web (
         selinux::boolean { 'httpd_can_network_connect':
           ensure     => true,
           persistent => true,
-          before     => [Rgbank::Web::Base[$name]],
+          before     => [Rgbank::Web::Base[$site_name]],
         }
       }
     }
   }
 
-  firewall { "000 accept rgbank web connections for ${name}":
+  firewall { "000 accept rgbank web connections for ${site_name}":
     dport  => $listen_port,
     proto  => tcp,
     action => accept,
@@ -69,7 +70,7 @@ class rgbank::web (
 }
 
 Rgbank::Web produces Http {
-  name => $name,
+  name => $site_name,
   ip   => $::ipaddress,
   port => $listen_port,
   host => $::trusted['certname'],
