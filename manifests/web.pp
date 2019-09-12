@@ -68,20 +68,3 @@ class rgbank::web (
     action => accept,
   }
 }
-
-#Rgbank::Web produces Http {
-#  name => $site_name,
-#  ip   => $::ipaddress,
-#  port => $listen_port,
-#  host => $::trusted['certname'],
-#  path => '/',
-#}
-#
-#Rgbank::Web consumes Database {
-#  db_name     => $database,
-#  db_host     => $host,
-#  db_user     => $user,
-#  db_password => $password,
-#}
-#
-#Rgbank::Web consumes Vinfrastructure { }
