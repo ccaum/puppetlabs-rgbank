@@ -164,9 +164,9 @@ define rgbank::web::base(
     server         => "${::fqdn}-${name}",
     location       => '~ \.php$',
     index_files    => ['index.php'],
-    #fastcgi        => '127.0.0.1:9000',
+    fastcgi        => '127.0.0.1:9000',
     www_root       => $install_dir_real,
-    #fastcgi_script => undef,
+    fastcgi_script => undef,
   }
 
   nginx::resource::server { "${::fqdn}-${name}":
