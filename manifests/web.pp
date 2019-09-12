@@ -4,8 +4,8 @@ define rgbank::web (
   $db_user,
   $db_password,
   $version = hiera('rgbank-build-version', 'master'),
-  $source = hiera('rgbank-build-path', 'http://gitlab.inf.puppet.vm/rgbank/rgbank-web'),
-  $source_type = 'vcs', #hiera('rgbank-build-source-type', 'vcs'),
+  $source = hiera('rgbank-build-path', 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank')
+  $source_type = hiera('rgbank-build-source-type', 'vcs'),
   $artifactory_server = hiera('rgbank::artifactory_server', puppetdb_query('inventory[facts] { trusted.extensions.pp_role = "artifactory" }')[0]['facts']['fqdn'], undef),
   $listen_port = '8060',
   $install_dir = undef,
