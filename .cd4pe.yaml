@@ -1,0 +1,67 @@
+spec_version: "V1"
+config:
+  enable_pull_requests_from_forks: false
+pipelines:
+  /feature_.*/:
+    triggers:
+    - "COMMIT"
+    stages:
+    - name: "Pipeline Stage 1"
+      steps:
+      - type: "DEPLOYMENT"
+        name: "Feature branch deployment on cdpe-delivery"
+        policy:
+          name: "cd4pe_deployments::feature_branch"
+        concurrent_compilations: 0
+        all_deployments: false
+        pe_server: "cdpe-delivery"
+        target:
+          type: "NODE_GROUP"
+      auto_promote: false
+  master:
+    triggers:
+    - "COMMIT"
+    - "PULL_REQUEST"
+    stages:
+    - name: "Pipeline Stage 1"
+      steps:
+      - type: "JOB"
+        name: "module-pdk-validate"
+        concurrent_compilations: 0
+        all_deployments: false
+      - type: "IMPACT_ANALYSIS"
+        deployments:
+        - "Deployment to null on cdpe-delivery"
+        - "Deployment to null on cdpe-delivery"
+        concurrent_compilations: 10
+        all_deployments: false
+      - type: "PULL_REQUEST_GATE"
+        concurrent_compilations: 0
+        all_deployments: false
+      auto_promote: "any_succeeded"
+    - name: "Lower UAT Deployment"
+      steps:
+      - type: "DEPLOYMENT"
+        name: "Deployment to null on cdpe-delivery"
+        policy:
+          name: "cd4pe_deployments::eventual_consistency"
+        concurrent_compilations: 0
+        all_deployments: false
+        pe_server: "cdpe-delivery"
+        target:
+          type: "NODE_GROUP"
+          node_group_id: "fcda068f-e499-44ef-81f2-255fc487b2e2"
+      auto_promote: false
+    - name: "Production Deployment"
+      steps:
+      - type: "DEPLOYMENT"
+        name: "Deployment to null on cdpe-delivery"
+        policy:
+          name: "cd4pe_deployments::eventual_consistency"
+        concurrent_compilations: 0
+        all_deployments: false
+        pe_server: "cdpe-delivery"
+        target:
+          type: "NODE_GROUP"
+          node_group_id: "49169472-1d52-48ac-acd8-915187585730"
+      auto_promote: false
