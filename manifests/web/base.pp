@@ -50,6 +50,14 @@ define rgbank::web::base(
       wp_debug_log         => false,
       wp_debug_display     => false,
       notify               => Service['nginx'],
+      wp_config_owner      => nginx,
+      wp_config_group      => nginx,
+      wp_config_mode       => 0700,
+      manage_wp_content    => true,
+      wp_content_owner     => nginx,
+      wp_content_group     => nginx,
+      wp_content_recurse   => true,
+      wp_site_url          => $::fqdn,
     }
 
     case $source_type {
