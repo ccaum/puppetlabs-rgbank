@@ -30,8 +30,7 @@ pipelines:
         concurrent_compilations: 0
         all_deployments: false
       - type: "IMPACT_ANALYSIS"
-        deployments:
-        - "Deployment to production on cdpe-delivery"
+        deployments: all
         concurrent_compilations: 10
         all_deployments: false
       - type: "PULL_REQUEST_GATE"
@@ -59,7 +58,6 @@ pipelines:
           name: "cd4pe_deployments::eventual_consistency"
         concurrent_compilations: 0
         all_deployments: false
-        control_repo: "control-repo"
         pe_server: "cdpe-delivery"
         target:
           type: "NODE_GROUP"
