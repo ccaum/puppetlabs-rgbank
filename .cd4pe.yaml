@@ -16,7 +16,7 @@ pipelines:
         name: "module-rspec-puppet"
         concurrent_compilations: 0
         all_deployments: false
-      auto_promote: false
+      auto_promote: "all_succeeded"
     - name: "Feature branch deployment"
       steps:
       - type: "DEPLOYMENT"
