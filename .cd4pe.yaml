@@ -53,7 +53,7 @@ pipelines:
       - type: "DEPLOYMENT"
         name: "Deployment to lower_uat on cdpe-delivery"
         policy:
-          name: "cd4pe_deployments::direct"
+          name: "cd4pe_deployments::eventual_consistency"
         timeout: 3600000
         concurrent_compilations: 0
         all_deployments: false
