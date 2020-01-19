@@ -17,7 +17,7 @@ pipelines:
         concurrent_compilations: 0
         all_deployments: false
       auto_promote: false
-    - name: "Pipeline Stage 2"
+    - name: "Feature branch deployment"
       steps:
       - type: "DEPLOYMENT"
         name: "Deployment on cdpe-delivery"
@@ -48,7 +48,21 @@ pipelines:
         concurrent_compilations: 0
         all_deployments: false
       auto_promote: false
-    - name: "Deployment stage"
+    - name: "Deployment to lower_uat"
+      steps:
+      - type: "DEPLOYMENT"
+        name: "Deployment to lower_uat on cdpe-delivery"
+        policy:
+          name: "cd4pe_deployments::direct"
+        timeout: 3600000
+        concurrent_compilations: 0
+        all_deployments: false
+        pe_server: "cdpe-delivery"
+        target:
+          type: "NODE_GROUP"
+          node_group_id: "fcda068f-e499-44ef-81f2-255fc487b2e2"
+      auto_promote: false
+    - name: "Deployment stage to production"
       steps:
       - type: "DEPLOYMENT"
         name: "Deployment to production on cdpe-delivery"
