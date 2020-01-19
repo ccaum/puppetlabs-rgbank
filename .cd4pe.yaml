@@ -1,17 +1,29 @@
 spec_version: "V1"
 config:
-  enable_pull_requests_from_forks: false
+  enable_pull_requests_from_forks: true
 pipelines:
   /feature_.*/:
     triggers:
     - "COMMIT"
     stages:
-    - name: "Pipeline Stage 1"
+    - name: "Code Validation stage"
+      steps:
+      - type: "JOB"
+        name: "module-pdk-validate"
+        concurrent_compilations: 0
+        all_deployments: false
+      - type: "JOB"
+        name: "module-rspec-puppet"
+        concurrent_compilations: 0
+        all_deployments: false
+      auto_promote: false
+    - name: "Pipeline Stage 2"
       steps:
       - type: "DEPLOYMENT"
-        name: "Feature branch deployment on cdpe-delivery"
+        name: "Deployment on cdpe-delivery"
         policy:
           name: "cd4pe_deployments::feature_branch"
+        timeout: 3600000
         concurrent_compilations: 0
         all_deployments: false
         pe_server: "cdpe-delivery"
@@ -21,41 +33,28 @@ pipelines:
   master:
     triggers:
     - "COMMIT"
-    - "PULL_REQUEST"
     stages:
-    - name: "Pipeline Stage 1"
+    - name: "Code Validation stage"
       steps:
       - type: "JOB"
         name: "module-pdk-validate"
         concurrent_compilations: 0
         all_deployments: false
-      - type: "IMPACT_ANALYSIS"
-        deployments: all
-        concurrent_compilations: 10
+      - type: "JOB"
+        name: "module-rspec-puppet"
+        concurrent_compilations: 0
         all_deployments: false
       - type: "PULL_REQUEST_GATE"
         concurrent_compilations: 0
         all_deployments: false
-      auto_promote: "any_succeeded"
-    - name: "Lower UAT Deployment"
-      steps:
-      - type: "DEPLOYMENT"
-        name: "Deployment to null on cdpe-delivery"
-        policy:
-          name: "cd4pe_deployments::eventual_consistency"
-        concurrent_compilations: 0
-        all_deployments: false
-        pe_server: "cdpe-delivery"
-        target:
-          type: "NODE_GROUP"
-          node_group_id: "fcda068f-e499-44ef-81f2-255fc487b2e2"
       auto_promote: false
-    - name: "Production Deployment"
+    - name: "Deployment stage"
       steps:
       - type: "DEPLOYMENT"
         name: "Deployment to production on cdpe-delivery"
         policy:
           name: "cd4pe_deployments::eventual_consistency"
+        timeout: 3600000
         concurrent_compilations: 0
         all_deployments: false
         pe_server: "cdpe-delivery"
@@ -63,3 +62,4 @@ pipelines:
           type: "NODE_GROUP"
           node_group_id: "49169472-1d52-48ac-acd8-915187585730"
       auto_promote: false
+
