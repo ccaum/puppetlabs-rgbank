@@ -61,7 +61,7 @@ pipelines:
         target:
           type: "NODE_GROUP"
           node_group_id: "fcda068f-e499-44ef-81f2-255fc487b2e2"
-      auto_promote: false
+      auto_promote: all_succeeded
     - name: "Deployment stage to production"
       steps:
       - type: "DEPLOYMENT"
