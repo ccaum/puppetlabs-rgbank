@@ -47,7 +47,7 @@ pipelines:
       - type: "PULL_REQUEST_GATE"
         concurrent_compilations: 0
         all_deployments: false
-      auto_promote: false
+      auto_promote: all_succeeded
     - name: "Deployment to lower_uat"
       steps:
       - type: "DEPLOYMENT"
@@ -61,7 +61,7 @@ pipelines:
         target:
           type: "NODE_GROUP"
           node_group_id: "fcda068f-e499-44ef-81f2-255fc487b2e2"
-      auto_promote: all_succeeded
+      auto_promote: false
     - name: "Deployment stage to production"
       steps:
       - type: "DEPLOYMENT"
