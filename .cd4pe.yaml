@@ -2,7 +2,7 @@ spec_version: "V1"
 config:
   enable_pull_requests_from_forks: true
 pipelines:
-  /^(?!unstable|dev|master)/:
+  /^((?!(unstable|dev|master)).)*$/:
     triggers:
     - "COMMIT"
     stages:
