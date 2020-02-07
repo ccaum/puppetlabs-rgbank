@@ -8,7 +8,7 @@ class rgbank::web (
   $source = lookup('rgbank-build-path', String, first, 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank'),
   $source_type = lookup('rgbank-build-source-type', String, first, 'vcs'),
   $artifactory_server = lookup('rgbank::artifactory_server') |$key| {  puppetdb_query('inventory[facts] { trusted.extensions.pp_role = "artifactory" }')[0]['facts']['fqdn'] },
-  $listen_port = '8060',
+  $listen_port = 8060,
   $install_dir = undef,
   $image_tag = 'latest',
   $enable_header = lookup('rgbank::web::enable_header', default => false),
