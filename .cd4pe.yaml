@@ -10,11 +10,9 @@ pipelines:
       steps:
       - type: "JOB"
         name: "module-pdk-validate"
-        concurrent_compilations: 0
         all_deployments: false
       - type: "JOB"
         name: "module-rspec-puppet"
-        concurrent_compilations: 0
         all_deployments: false
       auto_promote: "all_succeeded"
     - name: "Feature branch deployment"
@@ -23,8 +21,9 @@ pipelines:
         name: "Deployment on cdpe-delivery"
         policy:
           name: "cd4pe_deployments::feature_branch"
+        control_repo: "control-repo"
+        base_feature_branch: "production"
         timeout: 3600000
-        concurrent_compilations: 0
         all_deployments: false
         pe_server: "cdpe-delivery"
         target:
@@ -38,14 +37,11 @@ pipelines:
       steps:
       - type: "JOB"
         name: "module-pdk-validate"
-        concurrent_compilations: 0
         all_deployments: false
       - type: "JOB"
         name: "module-rspec-puppet"
-        concurrent_compilations: 0
         all_deployments: false
       - type: "PULL_REQUEST_GATE"
-        concurrent_compilations: 0
         all_deployments: false
       auto_promote: all_succeeded
     - name: "Deployment to lower_uat"
@@ -55,7 +51,6 @@ pipelines:
         policy:
           name: "cd4pe_deployments::eventual_consistency"
         timeout: 3600000
-        concurrent_compilations: 0
         all_deployments: false
         pe_server: "cdpe-delivery"
         target:
@@ -69,7 +64,6 @@ pipelines:
         policy:
           name: "cd4pe_deployments::eventual_consistency"
         timeout: 3600000
-        concurrent_compilations: 0
         all_deployments: false
         pe_server: "cdpe-delivery"
         target:
