@@ -17,7 +17,7 @@ class rgbank::db (
 
   mysql::db { $db_name:
     user     => $user,
-    password => mysql_password($password),
+    password => mysql::mysql_password($password),
     host     => 'localhost',
     grant    => ['ALL'],
     sql      => "/var/lib/${db_name}/rgbank.sql",
