@@ -178,11 +178,12 @@ define rgbank::web::base(
   }
 
   nginx::resource::server { "${::fqdn}-${name}":
-    ensure         => $ensure,
-    listen_port    => $listen_port,
-    www_root       => $install_dir_real,
-    index_files    => [ 'index.php' ],
-    fastcgi_script => undef,
+    ensure               => $ensure,
+    listen_port          => $listen_port,
+    use_default_location => false,
+    www_root             => $install_dir_real,
+    index_files          => [ 'index.php' ],
+    fastcgi_script       => undef,
   }
 
   if $ensure == 'absent' {
