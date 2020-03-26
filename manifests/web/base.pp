@@ -52,7 +52,7 @@ define rgbank::web::base(
       notify               => Service['nginx'],
       wp_config_owner      => nginx,
       wp_config_group      => nginx,
-      wp_config_mode       => '0700',
+      wp_config_mode       => '0666',
       manage_wp_content    => true,
       wp_content_owner     => nginx,
       wp_content_group     => nginx,
