@@ -1,2 +1,7 @@
 ---
   rgbank::web::version: 2.1
+  rgbank-build-path: 'https://github.com/rgbank/rgbank-web'
+  rgbank::web::enable_header: true
+  rgbank::web::listen_port: 8080
+  
+  rgbank::profile::db::password: 'password'
