@@ -13,7 +13,6 @@ define rgbank::web::base(
   $enable_header = false,
   $artifactory_server = undef,
 ) {
-
   if $install_dir {
     $install_dir_real = $install_dir
   } else {

@@ -1,4 +1,4 @@
 class rgbank::profile {
-  include profile::rgbank::web
-  include profile::rgbank::db
+  include rgbank::profile::web
+  include rgbank::profile::db
 }
