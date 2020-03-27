@@ -52,12 +52,12 @@ define rgbank::web::base(
       notify               => Service['nginx'],
       wp_config_owner      => nginx,
       wp_config_group      => nginx,
-      wp_config_mode       => 0700,
+      wp_config_mode       => '0666',
       manage_wp_content    => true,
       wp_content_owner     => nginx,
       wp_content_group     => nginx,
       wp_content_recurse   => true,
-      wp_site_url          => $::fqdn,
+      wp_site_url          => "http://${::ec2_metadata['public-ipv4']}:${listen_port}",
     }
 
     case $source_type {
@@ -178,11 +178,12 @@ define rgbank::web::base(
   }
 
   nginx::resource::server { "${::fqdn}-${name}":
-    ensure         => $ensure,
-    listen_port    => $listen_port,
-    www_root       => $install_dir_real,
-    index_files    => [ 'index.php' ],
-    fastcgi_script => undef,
+    ensure               => $ensure,
+    listen_port          => $listen_port,
+    use_default_location => false,
+    www_root             => $install_dir_real,
+    index_files          => [ 'index.php' ],
+    fastcgi_script       => undef,
   }
 
   if $ensure == 'absent' {
