@@ -176,7 +176,7 @@ define rgbank::web::base(
     fastcgi_script => undef,
   }
 
-  nginx::resource::server { "${::fqdn}-${name}":
+  nginx::resource::server { $name:
     ensure               => $ensure,
     listen_port          => $listen_port,
     use_default_location => false,
