@@ -197,7 +197,6 @@ define rgbank::web::base(
       path    => "${install_dir_real}/variables.php",
       content => epp('rgbank/variables.epp', {
         'version'            => $version,
-        'environment'        => pick($::trusted['extensions']['pp_environment'], $::environment),
         'build_source_type'  => $source_type,
         'build_source'       => $source,
         'artifactory_server' => $artifactory_server,
