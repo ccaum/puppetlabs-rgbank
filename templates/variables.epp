@@ -1,6 +1,5 @@
 <%- | Boolean $enable_header,
       String $version,
-      String $environment,
       String $build_source_type,
       String $build_source,
       String $artifactory_server
@@ -8,10 +7,6 @@
 <?php
 <%- if $version { %>
 $version = "<%= $version %>";
-<%- } %>
-
-<%- if $environment { %>
-$environment = "<%= $environment %>";
 <%- } %>
 
 <%- if $build_source_type { %>
