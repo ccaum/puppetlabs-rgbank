@@ -1,3 +1,9 @@
+# @summary
+#   Deploy a tagged release of RG Bank to production
+#
+# @param tag
+#   The tagged release in VCS to deploy
+#
 plan rgbank::update(
   String $tag,
 ) {
