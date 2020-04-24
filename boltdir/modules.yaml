@@ -1,9 +1,0 @@
----
-modules:
-  rgbank:
-    source: 'git://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank.git'
-    ref: 'v1.1'
-  hunner-wordpress:
-    ref: '1.0.0'
-  puppetlabs-docker:
-    ref: '2.1.0'

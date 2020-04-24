@@ -1,9 +1,0 @@
-transport: pcp
-pcp:
-  token-file: /Users/carlcaum/.puppetlabs/token
-  cacert: /Users/carlcaum/.puppetlabs/ca.crt
-  service-url: https://cdpe-carl.delivery.puppetlabs.net:8143
-puppetdb:
-  server_urls: ["https://cdpe-carl.delivery.puppetlabs.net:8081"]
-  cacert: /Users/carlcaum/.puppetlabs/ca.crt
-  token: /Users/carlcaum/.puppetlabs/token
