@@ -2,7 +2,7 @@ plan rgbank::update(
   String $tag,
 ) {
 
-  $query_results = puppetdb_query('nodes { clientcert ~ "wordpress.*" }')
+  $query_results = puppetdb_query('nodes { certname ~ "wordpress.*" }')
 
   $certnames = $query_results.map |$r| { $r['certname'] }
 
