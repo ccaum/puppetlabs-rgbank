@@ -1,0 +1,10 @@
+{
+  "description": "Update to a new tagged release of RG Bank",
+  "input_method": "stdin",
+  "parameters": {
+    "tag": {
+      "description": "Tag to deploy",
+      "type": "Optional[String[1]]"
+    }
+  }
+}
