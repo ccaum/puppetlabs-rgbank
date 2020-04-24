@@ -167,13 +167,20 @@ define rgbank::web::base(
   }
 
   nginx::resource::location { "${name}_root":
-    ensure         => $ensure,
-    server         => "${::fqdn}-${name}",
-    location       => '~ \.php$',
-    index_files    => ['index.php'],
-    fastcgi        => '127.0.0.1:9000',
-    www_root       => $install_dir_real,
-    fastcgi_script => undef,
+    ensure                => $ensure,
+    server                => $name,
+    location              => '~ \.php$',
+    index_files           => ['index.php'],
+    fastcgi               => '127.0.0.1:9000',
+    www_root              => $install_dir_real,
+    fastcgi_script        => undef,
+    proxy_read_timeout    => '',
+    proxy_connect_timeout => '',
+    proxy_send_timeout    => '',
+    proxy_set_header      => [],
+    proxy_hide_header     => [],
+    proxy_pass_header     => [],
+    proxy_ignore_header   => [],
   }
 
   nginx::resource::server { $name:

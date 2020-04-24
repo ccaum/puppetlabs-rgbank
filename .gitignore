@@ -25,3 +25,7 @@
 .project
 .envrc
 /inventory.yaml
+boltdir/modules
+boltdir/inventory.yaml
+boltdir/keys
+boltdir/.resource_types
