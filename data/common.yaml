@@ -1,5 +1,5 @@
 ---
-  rgbank-build-path: 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank-application.git'
+  rgbank::build-path: 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank-application.git'
   rgbank::web::enable_header: true
   rgbank::web::listen_port: 8080
   

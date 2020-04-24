@@ -18,7 +18,7 @@ class rgbank::db (
   mysql::db { $db_name:
     user     => $user,
     password => mysql::mysql_password($password),
-    host     => 'localhost',
+    host     => '%',
     grant    => ['ALL'],
     sql      => "/var/lib/${db_name}/rgbank.sql",
   }
@@ -29,6 +29,14 @@ class rgbank::db (
       password_hash => mysql_password($password),
     }
   }
+
+  if ! defined(Mysql_user["${user}@%"]) {
+    mysql_user { "${user}@%":
+      ensure        => 'present',
+      password_hash => mysql_password($password),
+    }
+  }
+
 }
 
 #Rgbank::Db produces Database {
