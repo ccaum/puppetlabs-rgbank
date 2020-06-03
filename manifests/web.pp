@@ -5,7 +5,7 @@ class rgbank::web (
   $db_user,
   $db_password,
   $version = lookup('rgbank-build-version', String, first, 'master'),
-  $source = lookup('rgbank-build-path', String, first, 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank-application.git'),
+  $source = lookup('rgbank::build-path', String, first, 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank-application.git'),
   $source_type = lookup('rgbank-build-source-type', String, first, 'vcs'),
   $artifactory_server = lookup('rgbank::artifactory_server', undef, undef, 'artifactory.delivery.puppetlabs.net'),
   $listen_port = 8060,
@@ -43,14 +43,14 @@ class rgbank::web (
     }
 
     if $::selinux == true {
-      if (! defined(Selinux::Port["allow-httpd-${listen_port}"])) {
-        selinux::port { "allow-httpd-${listen_port}":
-          context  => 'http_port_t',
-          port     => $listen_port,
-          protocol => 'tcp',
-          before   => [Rgbank::Web::Base[$site_name]],
-        }
-      }
+      #if (! defined(Selinux::Port["allow-httpd-${listen_port}"])) {
+      #  selinux::port { "allow-httpd-${listen_port}":
+      #    context  => 'http_port_t',
+      #    port     => $listen_port,
+      #    protocol => 'tcp',
+      #    before   => [Rgbank::Web::Base[$site_name]],
+      #  }
+      #}
 
       if (! defined(Selinux::Boolean['httpd_can_network_connect'])) {
         selinux::boolean { 'httpd_can_network_connect':
