@@ -1,7 +1,7 @@
 plan rgbank::develop(
   Optional[TargetSpec] $db_node = undef,
   Optional[TargetSpec] $app_node = undef,
-  Boolean $provision = false,
+  Boolean $provision = true,
 ) {
   if $provision {
     $nodes = run_plan('dev_env', count => 2, role => 'rgbank_base')
@@ -9,16 +9,16 @@ plan rgbank::develop(
     $_db_node = $nodes[0]
     $_app_node = $nodes[1]
     
-    wait_until_available($nodes)
   } else {
     $nodes = [$db_node, $app_node]
     $_db_node = $db_node
     $_app_node = $app_node
   }
+  wait_until_available($nodes)
 
   apply_prep($nodes)
 
-  $db_results = apply($_db_node, _catch_errors => true) {
+  apply($_db_node, _catch_errors => true) {
     class { 'mysql::server':
       override_options   => {
         'mysqld' => {
@@ -29,10 +29,8 @@ plan rgbank::develop(
 
     include rgbank::profile::db
   }
-  $db_results.each |$result| {
-    notice($result.report)
-  }
 
+  $db_node_fqdn = facts($_db_node)['fqdn']
   $app_results = apply($_app_node, _catch_errors => true) {
     class { 'php':
       composer => false,
@@ -42,13 +40,10 @@ plan rgbank::develop(
     }
 
     class { 'rgbank::profile::web':
-      db_host => $_db_node
+      db_host => $db_node_fqdn
     }
 
     Class['php'] -> Class['nginx']
-  }
-  $app_results.each |$result| {
-    notice($result.report)
   }
 
   return({
