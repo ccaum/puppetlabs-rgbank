@@ -1,6 +1,6 @@
 ---
-  rgbank::build-path: 'http://cdpe-carl-docker.delivery.puppetlabs.net/ccaum/rgbank-application.git'
+  rgbank::build-path: 'https://github.com/puppetlabs/rgbank.git'
   rgbank::web::enable_header: true
   rgbank::web::listen_port: 8080
   
-  rgbank::profile::db::password: 'password'
+  rgbank::profile::db::password: '98j2fi9ja983fu'
